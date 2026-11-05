@@ -16,8 +16,8 @@ export function ProductGallery({ name, images, video }: { name: string; images: 
   const cur = slides[i]!;
 
   return (
-    <div className="flex flex-col-reverse gap-3 self-start lg:sticky lg:top-24 lg:flex-row">
-      <div className="flex gap-2 overflow-x-auto lg:w-20 lg:flex-col" role="tablist" aria-label={`${name} views`}>
+    <div className="flex min-w-0 flex-col-reverse gap-3 self-start lg:sticky lg:top-24 lg:flex-row">
+      <div className="flex min-w-0 gap-2 overflow-x-auto pb-1 lg:w-20 lg:flex-col lg:pb-0" role="tablist" aria-label={`${name} views`}>
         {slides.map((s, k) => (
           <button
             key={k}
@@ -40,7 +40,7 @@ export function ProductGallery({ name, images, video }: { name: string; images: 
         ))}
       </div>
 
-      <div className="relative flex-1 overflow-hidden bg-carbon">
+      <div className="relative min-w-0 flex-1 overflow-hidden bg-carbon">
         <AnimatePresence mode="wait">
           <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.25 }}>
             {cur.type === "image" ? (

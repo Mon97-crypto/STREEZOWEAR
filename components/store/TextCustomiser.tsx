@@ -71,7 +71,7 @@ export function TextCustomiser() {
 
   return (
     <div className="grid gap-10 lg:grid-cols-2">
-      <div className="sticky top-24 self-start border border-gunmetal bg-carbon p-6 sm:p-10">
+      <div className="mx-auto w-full max-w-sm self-start border border-gunmetal bg-carbon p-6 sm:p-10 lg:sticky lg:top-24 lg:max-w-none">
         <TeeOutline side={zone.side}>
           <rect x={zone.x - zone.w / 2} y={zone.y - 10} width={zone.w} height={20} fill="none" stroke="#FF1E3C" strokeDasharray="2 2" strokeWidth=".6" opacity={text ? 0 : 0.8} transform={zone.rotate ? `rotate(${zone.rotate} ${zone.x} ${zone.y})` : undefined} />
           <text

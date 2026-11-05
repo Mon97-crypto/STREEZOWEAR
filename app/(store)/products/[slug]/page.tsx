@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: Params) {
   };
 
   return (
-    <div className="pb-28 pt-[72px] lg:pb-0">
+    <div className="pb-28 pt-[var(--sw-header)] lg:pb-0">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
       <nav aria-label="Breadcrumb" className="wrap label py-5 text-[0.65rem] text-steel">
         <Link href="/shop" className="hover:text-chrome">Shop</Link>
@@ -66,7 +66,7 @@ export default async function ProductPage({ params }: Params) {
       <div className="wrap grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16">
         <ProductGallery name={product.name} images={product.images} video={product.video} />
 
-        <div className="lg:sticky lg:top-24 lg:self-start">
+        <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
           <div className="flex flex-wrap gap-2">
             {product.isLimited && <span className="label border border-neon px-2.5 py-1 text-[0.65rem] text-neon">Limited edition</span>}
             {product.isNew && <span className="label border border-gunmetal px-2.5 py-1 text-[0.65rem] text-chrome">New drop</span>}

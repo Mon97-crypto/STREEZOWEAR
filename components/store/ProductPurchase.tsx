@@ -75,7 +75,7 @@ export function ProductPurchase({ product }: { product: Product }) {
       <fieldset id="size-picker" className="mt-8 scroll-mt-28">
         <div className="mb-3 flex items-baseline justify-between">
           <legend className="label text-steel">Size{size && <> — <span className="text-chrome">{size}</span></>}</legend>
-          <Link href="/size-guide" className="label text-[0.65rem] text-steel underline-offset-4 hover:text-neon hover:underline">Size guide</Link>
+          <Link href="/size-guide" className="label -my-3 inline-flex min-h-11 items-center text-[0.65rem] text-steel underline-offset-4 hover:text-neon hover:underline">Size guide</Link>
         </div>
         <div className="grid grid-cols-4 gap-2">
           {product.sizes.map((s) => {

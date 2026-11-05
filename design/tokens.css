@@ -66,12 +66,20 @@
   --sw-float-amplitude: 10px;
   --sw-tilt-max: 8deg;       /* cursor tilt ceiling — never distort the print */
 
+  /* Header: expanded (top of page, stacked S + wordmark) / compact (scrolled, wordmark only) */
+  --sw-header: 104px;
+  --sw-header-compact: 64px;
+
   /* ── Layers ─────────────────────────────────────────────────────── */
   --sw-z-header: 50;
   --sw-z-drawer: 60;
   --sw-z-modal: 70;
   --sw-z-toast: 80;
   --sw-z-loader: 90;
+}
+
+@media (min-width: 768px) {
+  :root { --sw-header: 124px; --sw-header-compact: 72px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

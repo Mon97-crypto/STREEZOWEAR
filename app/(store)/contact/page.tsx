@@ -18,9 +18,9 @@ export default function Contact() {
       <div className="wrap">
         <dl className="max-w-2xl divide-y divide-gunmetal border-y border-gunmetal">
           {rows.map(([k, v]) => (
-            <div key={k} className="grid grid-cols-[10rem_1fr] gap-4 py-5">
+            <div key={k} className="grid gap-1 py-5 sm:grid-cols-[10rem_1fr] sm:gap-4">
               <dt className="label text-steel">{k}</dt>
-              <dd>{v}</dd>
+              <dd className="break-words">{v}</dd>
             </div>
           ))}
         </dl>

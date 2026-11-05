@@ -20,9 +20,9 @@ export function Footer() {
           {COLS.map((c) => (
             <div key={c.title}>
               <p className="label mb-4 text-neon">{c.title}</p>
-              <ul className="space-y-2.5 text-sm text-steel">
+              <ul className="space-y-0.5 text-sm text-steel">
                 {c.links.map(([label, href]) => (
-                  <li key={href}><Link href={href} className="hover:text-chrome">{label}</Link></li>
+                  <li key={href}><Link href={href} className="inline-block py-2 hover:text-chrome">{label}</Link></li>
                 ))}
               </ul>
             </div>

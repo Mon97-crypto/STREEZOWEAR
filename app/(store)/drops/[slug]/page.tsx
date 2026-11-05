@@ -41,7 +41,7 @@ export default async function DropPage({ params }: Params) {
         <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(7_7_10/.5),transparent_35%,rgb(7_7_10/.95)_92%)]" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-void/45 sm:bg-transparent" />
         <BoltSlash className="top-[62%] -z-10" />
-        <div className="wrap w-full pb-[clamp(3rem,8vw,6rem)] pt-32">
+        <div className="wrap w-full pb-[clamp(3rem,8vw,6rem)] pt-[calc(var(--sw-header)+2rem)]">
           <RuleLabel>Drop {drop.number}{drop.isLimited ? " · Limited run" : ""}</RuleLabel>
           <h1 className="display chrome-text mt-4 text-[clamp(3.5rem,12vw,11rem)]">{drop.name}</h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-steel">{drop.intro}</p>

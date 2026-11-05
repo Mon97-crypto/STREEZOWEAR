@@ -147,7 +147,7 @@ export function FloatingStore({ products, kicker }: { products: Product[]; kicke
     <div className="relative">
       <div
         ref={stageRef}
-        className="relative h-[500px] w-full select-none overflow-hidden sm:h-[min(78svh,760px)] sm:min-h-[520px]"
+        className={`relative w-full select-none overflow-hidden sm:h-[min(78svh,760px)] sm:min-h-[520px] ${focus === null ? "h-[500px]" : "min-h-[500px]"}`}
         style={{ touchAction: "pan-y" }}
         onPointerDown={(e) => {
           if (focus !== null || e.button !== 0) return;
@@ -356,7 +356,7 @@ function FocusView({ products, index, onIndex, onClose, kicker }: { products: Pr
 
   return (
     <motion.div
-      className="absolute inset-0 z-[200] grid items-center gap-6 px-1 md:grid-cols-[1.15fr_1fr]"
+      className="relative z-[200] grid items-center gap-4 px-1 py-4 sm:absolute sm:inset-0 sm:gap-6 sm:py-0 md:grid-cols-[1.15fr_1fr]"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -364,7 +364,7 @@ function FocusView({ products, index, onIndex, onClose, kicker }: { products: Pr
       role="dialog"
       aria-label={p.name}
     >
-      <div className="relative mx-auto w-[min(70%,46svh,420px)] md:w-[min(88%,62svh,540px)]">
+      <div className="relative mx-auto w-[min(62%,36svh,300px)] sm:w-[min(70%,46svh,420px)] md:w-[min(88%,62svh,540px)]">
         <AnimatePresence mode="wait">
           <motion.div
             key={p.slug}
@@ -385,7 +385,7 @@ function FocusView({ products, index, onIndex, onClose, kicker }: { products: Pr
         initial={{ opacity: 0, x: 30 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-        className="relative z-10 max-md:-mt-4 max-md:bg-void/80 max-md:p-4 max-md:backdrop-blur"
+        className="relative z-10 max-md:bg-void/80 max-md:p-1 max-md:backdrop-blur"
       >
         <p className="label text-[0.65rem] text-neon">{kicker} · {String(index + 1).padStart(2, "0")}/{String(products.length).padStart(2, "0")}</p>
         <h3 className="display mt-3 text-[clamp(2.25rem,5vw,4.5rem)]">{p.name}</h3>

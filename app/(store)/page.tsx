@@ -29,7 +29,7 @@ export default async function Home() {
         <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(7_7_10/.6)_0%,rgb(7_7_10/.1)_40%,rgb(7_7_10/.92)_88%,var(--sw-void)_100%)]" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-void/50 sm:bg-transparent" />
         <BoltSlash className="top-[58%] -z-10" />
-        <div className="wrap w-full pb-[clamp(3rem,8vw,6rem)] pt-32">
+        <div className="wrap w-full pb-[clamp(3rem,8vw,6rem)] pt-[calc(var(--sw-header)+2rem)]">
           <RuleLabel>Drop {drop.number} · {drop.name}</RuleLabel>
           <h1 className="display chrome-text mt-5 text-[clamp(2.9rem,9vw,8.5rem)]">
             Own your street,<br />define your style.
@@ -117,9 +117,9 @@ export default async function Home() {
             <h2 className="display mt-4 text-[clamp(2.25rem,5vw,4rem)]">Looks expensive. Is heavy.</h2>
             <dl className="mt-10 grid grid-cols-2 gap-px bg-gunmetal">
               {[["Weight", "250 GSM"], ["Fabric", "Cotton, polyester"], ["Finish", "Hand-finished crystal"], ["Sizes", "S · M · L · XL"]].map(([k, v]) => (
-                <div key={k} className="bg-void p-5">
+                <div key={k} className="bg-void p-4 sm:p-5">
                   <dt className="label text-steel">{k}</dt>
-                  <dd className="display mt-2 text-xl">{v}</dd>
+                  <dd className="display mt-2 text-base leading-tight sm:text-xl">{v}</dd>
                 </div>
               ))}
             </dl>
@@ -157,7 +157,7 @@ export default async function Home() {
         <div className="wrap">
           <Reveal className="relative overflow-hidden">
             <Image src="/media/products/lineup-eight-tees-1556.webp" alt="The STREEZØWEAR lineup: eight crystal-detailed oversized tees" width={1556} height={1038} sizes="100vw" className="h-auto w-full opacity-80" />
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-void via-void/70 to-transparent p-[clamp(1.5rem,5vw,4rem)]">
+            <div className="pt-6 sm:absolute sm:inset-x-0 sm:bottom-0 sm:bg-gradient-to-t sm:from-void sm:via-void/70 sm:to-transparent sm:p-[clamp(1.5rem,5vw,4rem)]">
               <p className="label text-neon">{business.shortTagline}</p>
               <p className="display mt-3 text-[clamp(2rem,5vw,4.5rem)]">Stay locked in.<br />Next drop soon.</p>
             </div>

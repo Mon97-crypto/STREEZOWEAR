@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="wrap grid min-h-[80vh] place-items-center pt-[72px] text-center">
+    <div className="wrap grid min-h-[80vh] place-items-center pt-[var(--sw-header)] text-center">
       <div>
         <p className="label rule text-neon">404</p>
         <h1 className="display chrome-text mt-6 text-[clamp(3rem,10vw,8rem)]">Wrong street.</h1>

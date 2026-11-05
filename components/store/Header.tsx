@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { Wordmark } from "@/components/brand/Logo";
+import { LogoStack, Wordmark } from "@/components/brand/Logo";
 import { BagIcon, CloseIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/ui/Icons";
 import { useHydrated } from "@/components/ui/useHydrated";
 import { cartCount, useCart } from "@/lib/cart/store";
@@ -31,18 +31,35 @@ export function Header() {
   }, [menu]);
 
   const solid = scrolled || !overHero || menu;
+  const compact = scrolled || menu;
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
 
   return (
     <>
       <header
         className={`fixed inset-x-0 top-0 z-50 border-b transition-[background,border-color,backdrop-filter] duration-300 ${
-          solid ? "border-gunmetal bg-void/85 backdrop-blur-xl" : "border-transparent bg-gradient-to-b from-void via-void/75 to-transparent"
+          solid ? "border-gunmetal bg-void" : "border-transparent bg-gradient-to-b from-void from-30% via-void/85 to-transparent"
         }`}
       >
-        <nav className="wrap flex h-[72px] items-center justify-between gap-6" aria-label="Main">
-          <Link href="/" aria-label="STREEZØWEAR home" className="shrink-0">
-            <Wordmark priority className="w-[150px] sm:w-[176px]" />
+        <nav
+          className="wrap flex items-center justify-between gap-6 transition-[height] duration-300 ease-out-expo"
+          style={{ height: compact ? "var(--sw-header-compact)" : "var(--sw-header)" }}
+          aria-label="Main"
+        >
+          <Link href="/" aria-label="STREEZØWEAR home" className="relative grid shrink-0 place-items-start">
+            {/* expanded: S mark stacked over the wordmark · compact: wordmark only */}
+            <span
+              className={`col-start-1 row-start-1 transition-all duration-300 ${compact ? "pointer-events-none -translate-y-2 scale-95 opacity-0" : "opacity-100"}`}
+              aria-hidden={compact}
+            >
+              <LogoStack priority className="w-[132px] md:w-[158px]" />
+            </span>
+            <span
+              className={`col-start-1 row-start-1 self-center transition-all duration-300 ${compact ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
+              aria-hidden={!compact}
+            >
+              <Wordmark priority className="w-[150px] sm:w-[176px]" />
+            </span>
           </Link>
           <ul className="label hidden items-center gap-7 xl:flex">
             {NAV.map((n) => (
@@ -87,7 +104,7 @@ export function Header() {
         {menu && (
           <motion.div
             id="mobile-menu"
-            className="fixed inset-0 z-40 flex flex-col bg-void pt-[72px] xl:hidden"
+            className="fixed inset-0 z-40 flex flex-col overflow-y-auto bg-void pt-[var(--sw-header-compact)] xl:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

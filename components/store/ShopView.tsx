@@ -53,7 +53,7 @@ export function ShopView({ products, categories, active }: { products: Product[]
 
 function Chip({ href, on, children }: { href: string; on: boolean; children: React.ReactNode }) {
   return (
-    <Link href={href} aria-current={on ? "page" : undefined} className={`label shrink-0 whitespace-nowrap border px-3 py-2.5 text-[0.65rem] transition-colors ${on ? "border-neon text-neon" : "border-transparent text-steel hover:text-chrome"}`}>
+    <Link href={href} aria-current={on ? "page" : undefined} className={`label inline-flex min-h-11 shrink-0 items-center whitespace-nowrap border px-3 text-[0.65rem] transition-colors ${on ? "border-neon text-neon" : "border-transparent text-steel hover:text-chrome"}`}>
       {children}
     </Link>
   );
