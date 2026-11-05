@@ -4,8 +4,8 @@ Status: **Phase 1 complete. Waiting on the owner's decisions (§9) before Phase 
 Nothing here is application code yet. This phase fixes the brand rules, the asset pipeline,
 the technical architecture and the data model so later phases do not have to be redone.
 
-Visual proof of direction: [`design/styleboard.html`](../design/styleboard.html)
-(serve the repo root over HTTP, e.g. `python3 -m http.server`, then open `/design/styleboard.html`;
+Visual proof of direction: [`index.html`](../index.html)
+(serve the repo root over HTTP, e.g. `python3 -m http.server`, then open `/`;
 the fabric-light mask needs HTTP, not `file://`).
 
 ---
@@ -266,7 +266,7 @@ streezowear/
 │  ├─ seed.sql                    # clearly-labelled SAMPLE catalogue
 │  └─ tests/                      # pgTAP RLS/permission tests
 ├─ scripts/  admin-provision.ts  assets/
-├─ design/   tokens.css  styleboard.html
+├─ design/   tokens.css
 ├─ public/   brand/  media/
 ├─ tests/    unit/  integration/  e2e/
 ├─ docs/     PHASE-1.md  SETUP.md  DEPLOYMENT.md

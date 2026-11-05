@@ -19,5 +19,5 @@
 - `assets/source/`: untouched originals (brand book, logos extracted from it, product photos, campaign films)
 - `public/brand`, `public/media`: web-optimised derivatives (WebP, H.264/VP9, posters, favicon set)
 - `design/tokens.css`: brand design tokens (source: brand book)
-- `design/styleboard.html`: interactive visual direction (serve repo root over HTTP to view)
+- `index.html`: interactive visual direction (serve repo root over HTTP to view)
 - `scripts/assets/`: asset pipeline scripts
