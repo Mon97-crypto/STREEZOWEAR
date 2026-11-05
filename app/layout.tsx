@@ -10,7 +10,7 @@ import { business, site } from "@/lib/config/business";
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `${business.name} — Own your street, define your style`, template: `%s · ${business.name}` },
-  description: "Premium oversized streetwear from Bangalore. Limited drops, crystal-detailed tees, customisation and 60-minute delivery in select areas.",
+  description: "Premium oversized streetwear from Bangalore. Limited drops, tees hand-finished in crystal, customisation and 60-minute delivery in select areas.",
   applicationName: business.name,
   icons: {
     icon: [

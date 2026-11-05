@@ -35,7 +35,7 @@ export default async function Home() {
             Own your street,<br />define your style.
           </h1>
           <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-steel">
-            Premium oversized tees, finished in crystal and released in limited drops. Made in Bangalore for people who wear their attitude.
+            Premium oversized tees, hand-finished in crystal and released in limited drops. Made in Bangalore for people who wear their attitude.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href={`/drops/${drop.slug}`} className="btn btn-primary">Shop the latest drop</Link>
@@ -116,7 +116,7 @@ export default async function Home() {
             <RuleLabel>The craft</RuleLabel>
             <h2 className="display mt-4 text-[clamp(2.25rem,5vw,4rem)]">Looks expensive. Is heavy.</h2>
             <dl className="mt-10 grid grid-cols-2 gap-px bg-gunmetal">
-              {[["Weight", "250 GSM"], ["Fabric", "Cotton, polyester"], ["Finish", "Crystal-detailed"], ["Sizes", "S · M · L · XL"]].map(([k, v]) => (
+              {[["Weight", "250 GSM"], ["Fabric", "Cotton, polyester"], ["Finish", "Hand-finished crystal"], ["Sizes", "S · M · L · XL"]].map(([k, v]) => (
                 <div key={k} className="bg-void p-5">
                   <dt className="label text-steel">{k}</dt>
                   <dd className="display mt-2 text-xl">{v}</dd>

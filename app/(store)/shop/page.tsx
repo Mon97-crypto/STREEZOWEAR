@@ -5,7 +5,7 @@ import { getCategories, getProducts } from "@/lib/catalog/queries";
 
 export const metadata: Metadata = {
   title: "Shop",
-  description: "Premium oversized tees and full-sleeve velvet, 250 GSM, crystal-detailed. Limited drops from Bangalore.",
+  description: "Premium oversized tees and full-sleeve velvet, 250 GSM, hand-finished in crystal. Limited drops from Bangalore.",
   alternates: { canonical: "/shop" },
 };
 
