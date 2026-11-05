@@ -1,0 +1,85 @@
+/*
+ * STREEZØWEAR design tokens — source of truth: assets/source/brand/STREEZOWEAR_Brand_Book.pdf
+ * "Black first. Red is the light source. Chrome is the finish."
+ * Proportion on any screen: ~70% black · 20% chrome · 10% red.
+ *
+ * Phase 2 imports this file from app/globals.css and maps it into tailwind.config.ts.
+ */
+:root {
+  /* ── Brand palette (Brand Book §04) ─────────────────────────────── */
+  --sw-void: #07070a;      /* brand black — page background, packaging */
+  --sw-carbon: #131318;    /* raised surfaces, cards, drawers */
+  --sw-gunmetal: #3b3e45;  /* dividers, borders */
+  --sw-steel: #888c96;     /* secondary text */
+  --sw-chrome: #e8e8ec;    /* primary text on black */
+  --sw-blood: #a01529;     /* deep fills only — never text on black */
+  --sw-neon: #ff1e3c;      /* signature: outlines, the bolt, buttons, prices, drop callouts */
+
+  /* Derived (not new colours — tints/alpha of the palette above) */
+  --sw-carbon-2: #1a1a21;              /* hover state of carbon */
+  --sw-neon-glow: rgb(255 30 60 / 0.55);
+  --sw-neon-haze: rgb(255 30 60 / 0.14);
+  --sw-chrome-gradient: linear-gradient(180deg, #ffffff 0%, #e8e8ec 38%, #888c96 62%, #e8e8ec 100%);
+
+  /* Semantic */
+  --sw-bg: var(--sw-void);
+  --sw-surface: var(--sw-carbon);
+  --sw-border: var(--sw-gunmetal);
+  --sw-text: var(--sw-chrome);
+  --sw-text-muted: var(--sw-steel);
+  --sw-accent: var(--sw-neon);
+  --sw-on-accent: var(--sw-void);      /* Brand Book §08: neon-red buttons with black text */
+  --sw-focus: var(--sw-neon);
+
+  /* ── Typography (Brand Book §05) ────────────────────────────────── */
+  --sw-font-display: "Archivo", system-ui, sans-serif;     /* 900 italic, caps, -0.02em */
+  --sw-font-label: "JetBrains Mono", ui-monospace, monospace; /* 500 italic, caps, 0.3em */
+  --sw-font-body: "Inter", system-ui, sans-serif;            /* 400 / 600, sentence case */
+
+  --sw-track-display: -0.02em;
+  --sw-track-label: 0.3em;
+
+  /* Fluid type scale */
+  --sw-text-hero: clamp(3rem, 9vw, 8.5rem);
+  --sw-text-h1: clamp(2.5rem, 6vw, 5rem);
+  --sw-text-h2: clamp(1.875rem, 4vw, 3.25rem);
+  --sw-text-h3: clamp(1.25rem, 2vw, 1.75rem);
+  --sw-text-body: 1rem;
+  --sw-text-small: 0.875rem;
+  --sw-text-label: 0.75rem;
+
+  /* ── Space, radius, elevation ───────────────────────────────────── */
+  --sw-gutter: clamp(1rem, 4vw, 3rem);
+  --sw-section: clamp(4.5rem, 12vw, 10rem);
+  --sw-radius: 2px;          /* sharp — the brand is "dark, sharp, electric". No pill cards. */
+  --sw-radius-control: 2px;
+  --sw-hairline: 1px solid var(--sw-gunmetal);
+  --sw-shadow-float: 0 40px 60px -30px rgb(0 0 0 / 0.9);
+
+  /* ── Motion ─────────────────────────────────────────────────────── */
+  --sw-ease-out: cubic-bezier(0.16, 1, 0.3, 1);    /* reveals, lifts */
+  --sw-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);/* page transitions */
+  --sw-dur-fast: 160ms;
+  --sw-dur-base: 320ms;
+  --sw-dur-slow: 700ms;
+  --sw-float-period: 6s;     /* idle float cycle */
+  --sw-float-amplitude: 10px;
+  --sw-tilt-max: 8deg;       /* cursor tilt ceiling — never distort the print */
+
+  /* ── Layers ─────────────────────────────────────────────────────── */
+  --sw-z-header: 50;
+  --sw-z-drawer: 60;
+  --sw-z-modal: 70;
+  --sw-z-toast: 80;
+  --sw-z-loader: 90;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --sw-dur-fast: 0ms;
+    --sw-dur-base: 0ms;
+    --sw-dur-slow: 0ms;
+    --sw-float-amplitude: 0px;
+    --sw-tilt-max: 0deg;
+  }
+}

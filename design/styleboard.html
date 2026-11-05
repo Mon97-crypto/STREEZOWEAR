@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STREEZØWEAR — Phase 1 Style Board</title>
+<link rel="icon" href="../public/brand/s-mark-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,800;1,900&family=Inter:wght@400;600&family=JetBrains+Mono:ital,wght@1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html{background:var(--sw-bg);color:var(--sw-text);font-family:var(--sw-font-body);-webkit-font-smoothing:antialiased}
+  body{margin:0;overflow-x:hidden}
+  img,video{display:block;max-width:100%}
+  a{color:inherit}
+  .wrap{max-width:1440px;margin:0 auto;padding:0 var(--sw-gutter)}
+  .label{font-family:var(--sw-font-label);font-style:italic;font-weight:500;text-transform:uppercase;letter-spacing:var(--sw-track-label);font-size:var(--sw-text-label)}
+  .label.red{color:var(--sw-neon)}
+  .rule{display:inline-flex;align-items:center;gap:.9em;white-space:nowrap}
+  @media (max-width:480px){.rule{letter-spacing:.2em}.rule::before,.rule::after{width:1.2em}}
+  .rule::before,.rule::after{content:"";width:2.2em;height:1px;background:var(--sw-neon);box-shadow:0 0 8px var(--sw-neon-glow)}
+  .display{font-family:var(--sw-font-display);font-style:italic;font-weight:900;text-transform:uppercase;letter-spacing:var(--sw-track-display);line-height:.92;margin:0}
+  .chrome{background:var(--sw-chrome-gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .muted{color:var(--sw-text-muted)}
+  .sample{display:inline-block;border:1px dashed var(--sw-steel);color:var(--sw-steel);padding:.1em .5em;font-family:var(--sw-font-label);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;vertical-align:middle}
+
+  /* Header */
+  header{position:fixed;inset:0 0 auto;z-index:var(--sw-z-header);transition:background var(--sw-dur-base) var(--sw-ease-out),border-color var(--sw-dur-base);border-bottom:1px solid transparent}
+  header.scrolled{background:rgb(7 7 10 / .86);backdrop-filter:blur(14px);border-color:var(--sw-gunmetal)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .nav img{height:22px;width:auto;mix-blend-mode:screen} /* lockup sits on Void; screen blend drops the Void box over video without altering the file */
+  .nav ul{display:flex;gap:2rem;list-style:none;margin:0;padding:0}
+  .nav ul a{text-decoration:none;position:relative;padding:.5rem 0}
+  .nav ul a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1px;background:var(--sw-neon);box-shadow:0 0 8px var(--sw-neon-glow);transition:right var(--sw-dur-base) var(--sw-ease-out)}
+  .nav ul a:hover{color:#fff}
+  .nav ul a:hover::after{right:0}
+  .icons{display:flex;gap:1.25rem;align-items:center}
+  .icons svg{width:20px;height:20px;stroke:var(--sw-chrome);fill:none;stroke-width:1.5}
+  .bag{position:relative}
+  .bag b{position:absolute;top:-6px;right:-9px;background:var(--sw-neon);color:var(--sw-void);font:600 10px/16px var(--sw-font-body);min-width:16px;height:16px;text-align:center;border-radius:8px}
+  .menu{display:none;background:none;border:0;padding:12px;margin:-12px;cursor:pointer}
+  .menu svg{width:22px;height:22px;stroke:var(--sw-chrome);stroke-width:1.5}
+  @media (max-width:960px){.nav ul{display:none}.menu{display:block}.icons .hide-sm{display:none}}
+
+  /* Hero */
+  .hero{position:relative;min-height:100svh;display:grid;align-items:end;overflow:hidden;isolation:isolate}
+  .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;opacity:.72}
+  .hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgb(7 7 10/.55) 0%,rgb(7 7 10/.1) 40%,rgb(7 7 10/.92) 88%,var(--sw-void) 100%)}
+  .hero .wrap{padding-bottom:clamp(3rem,8vw,6rem);width:100%}
+  .hero h1{font-size:var(--sw-text-hero)}
+  .hero p{max-width:34rem;font-size:1.0625rem;line-height:1.6}
+  .bolt{position:absolute;left:-10%;right:-10%;top:58%;height:2px;transform:rotate(-14deg);background:linear-gradient(90deg,transparent,var(--sw-neon) 40%,#ffd0d7 50%,var(--sw-neon) 60%,transparent);box-shadow:0 0 18px 2px var(--sw-neon-glow);opacity:0;animation:strike 7s var(--sw-ease-in-out) 1.2s infinite;z-index:-1}
+  @keyframes strike{0%{opacity:0;clip-path:inset(0 100% 0 0)}6%{opacity:1;clip-path:inset(0 0 0 0)}14%{opacity:.85}22%,100%{opacity:0}}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:.75rem;min-height:52px;padding:0 1.75rem;font-family:var(--sw-font-label);font-style:italic;font-weight:500;letter-spacing:.22em;text-transform:uppercase;font-size:.8rem;text-decoration:none;border-radius:var(--sw-radius-control);border:1px solid var(--sw-neon);cursor:pointer;transition:box-shadow var(--sw-dur-base) var(--sw-ease-out),background var(--sw-dur-base),color var(--sw-dur-base)}
+  .btn-primary{background:var(--sw-neon);color:var(--sw-on-accent)}
+  .btn-primary:hover{box-shadow:0 0 0 1px var(--sw-neon),0 0 28px var(--sw-neon-glow)}
+  .btn-ghost{background:transparent;color:var(--sw-chrome);border-color:var(--sw-gunmetal)}
+  .btn-ghost:hover{border-color:var(--sw-neon);color:#fff}
+  .btn:focus-visible{outline:2px solid var(--sw-focus);outline-offset:3px}
+
+  section{padding:var(--sw-section) 0}
+  .head{display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap;margin-bottom:clamp(2.5rem,6vw,4.5rem)}
+  .head h2{font-size:var(--sw-text-h1)}
+
+  /* Floating showroom */
+  .showroom{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1rem,3vw,3rem)}
+  @media (max-width:900px){.showroom{grid-template-columns:1fr 1fr}}
+  @media (max-width:600px){.showroom{grid-template-columns:1fr}}
+  .piece{position:relative;perspective:1200px;text-decoration:none;display:block;outline:none}
+  .stage{position:relative;aspect-ratio:4/5;display:grid;place-items:center;background:radial-gradient(60% 50% at 50% 42%,#15151b 0%,var(--sw-void) 72%);overflow:hidden}
+  .stage::before{/* ambient red haze behind the piece */content:"";position:absolute;inset:0;background:radial-gradient(45% 38% at 50% 40%,var(--sw-neon-haze),transparent 75%);opacity:0;transition:opacity var(--sw-dur-slow) var(--sw-ease-out);pointer-events:none;z-index:0}
+  .garment::after{/* the red light that falls across the fabric — masked to the garment's own silhouette */content:"";position:absolute;inset:0;background:radial-gradient(42% 36% at var(--lx,50%) var(--ly,20%),rgb(255 30 60/.42),rgb(255 30 60/.08) 55%,transparent 75%);-webkit-mask:var(--mask) center/100% 100% no-repeat;mask:var(--mask) center/100% 100% no-repeat;mix-blend-mode:screen;opacity:0;transition:opacity var(--sw-dur-slow) var(--sw-ease-out);pointer-events:none}
+  .piece:is(:hover,:focus-visible) .garment::after{opacity:1}
+  .stage::after{content:"";position:absolute;left:18%;right:18%;bottom:9%;height:7%;border-radius:50%;background:radial-gradient(closest-side,rgb(0 0 0/.85),transparent);filter:blur(6px);transition:transform var(--sw-dur-slow) var(--sw-ease-out),opacity var(--sw-dur-slow);z-index:0}
+  .float{position:relative;z-index:1;width:84%;animation:bob var(--sw-float-period) var(--sw-ease-in-out) infinite;animation-delay:var(--d,0s)}
+  .garment{position:relative;transition:transform var(--sw-dur-slow) var(--sw-ease-out),filter var(--sw-dur-slow) var(--sw-ease-out);transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(0);filter:drop-shadow(0 30px 30px rgb(0 0 0/.6))}
+  .garment img{width:100%;height:auto;user-select:none;-webkit-user-drag:none}
+  .garment.vignette img{-webkit-mask-image:radial-gradient(62% 62% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(62% 62% at 50% 50%,#000 70%,transparent 100%)}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(calc(var(--sw-float-amplitude) * -1))}}
+  .piece:is(:hover,:focus-visible) .stage::before{opacity:1}
+  .piece:is(:hover,:focus-visible) .garment{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) translateZ(40px) translateY(-8px);filter:drop-shadow(0 0 1px rgb(255 30 60/.7)) drop-shadow(0 0 22px rgb(255 30 60/.28)) drop-shadow(0 40px 34px rgb(0 0 0/.7))}
+  .piece:is(:hover,:focus-visible) .stage::after{transform:scale(.82);opacity:.6}
+  .piece:focus-visible .stage{outline:1px solid var(--sw-neon);outline-offset:-1px}
+  .badge{position:absolute;top:1rem;left:1rem;z-index:3;padding:.35rem .6rem;border:1px solid var(--sw-neon);color:var(--sw-neon);background:rgb(7 7 10/.6)}
+  .meta{display:flex;justify-content:space-between;gap:1rem;padding-top:1.1rem;border-top:var(--sw-hairline);margin-top:-1px}
+  .meta h3{font-family:var(--sw-font-display);font-style:italic;font-weight:900;text-transform:uppercase;letter-spacing:var(--sw-track-display);font-size:1.15rem;margin:0 0 .35rem}
+  .meta p{margin:0;font-size:var(--sw-text-small);color:var(--sw-text-muted);max-width:26ch}
+  .price{color:var(--sw-neon);font-family:var(--sw-font-label);font-style:italic;letter-spacing:.12em;white-space:nowrap}
+  .view{display:block;margin-top:.9rem;opacity:0;transform:translateY(6px);transition:opacity var(--sw-dur-base),transform var(--sw-dur-base) var(--sw-ease-out)}
+  .piece:is(:hover,:focus-visible) .view{opacity:1;transform:none}
+  @media (hover:none){.view{opacity:1;transform:none}}
+
+  /* Story chapters */
+  .chapters{display:grid;grid-template-columns:repeat(4,1fr);border-top:var(--sw-hairline)}
+  @media (max-width:900px){.chapters{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.chapters{grid-template-columns:1fr}}
+  .chapter{padding:2rem 1.5rem 2.5rem 0;border-bottom:var(--sw-hairline)}
+  .chapter h3{font-family:var(--sw-font-display);font-style:italic;font-weight:900;text-transform:uppercase;font-size:1.6rem;letter-spacing:var(--sw-track-display);margin:1rem 0 .75rem}
+  .chapter p{margin:0;color:var(--sw-text-muted);line-height:1.6;max-width:32ch}
+
+  /* Drop callout */
+  .drop{position:relative;display:grid;grid-template-columns:1.1fr 1fr;min-height:80vh;background:var(--sw-carbon);overflow:hidden}
+  @media (max-width:900px){.drop{grid-template-columns:1fr}}
+  .drop video{width:100%;height:100%;object-fit:cover;min-height:50vh}
+  .drop .copy{padding:clamp(2rem,6vw,5rem);display:flex;flex-direction:column;justify-content:center;gap:1.5rem}
+  .drop h2{font-size:var(--sw-text-h1)}
+  .count{display:flex;gap:1.5rem}
+  .count div{display:flex;flex-direction:column;gap:.25rem}
+  .count b{font-family:var(--sw-font-display);font-style:italic;font-weight:900;font-size:2.5rem;line-height:1;font-variant-numeric:tabular-nums}
+
+  /* Tokens */
+  .swatches{display:grid;grid-template-columns:repeat(7,1fr);border:var(--sw-hairline)}
+  @media (max-width:760px){.swatches{grid-template-columns:repeat(2,1fr)}}
+  .sw{height:180px;padding:1rem;display:flex;flex-direction:column;justify-content:end;font-size:.8rem}
+  .sw strong{font-family:var(--sw-font-display);font-style:italic;font-weight:900;text-transform:uppercase}
+  .types{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem}
+  @media (max-width:760px){.types{grid-template-columns:1fr}}
+  .type{background:var(--sw-carbon);border-top:2px solid var(--sw-neon);padding:1.5rem}
+
+  footer{border-top:var(--sw-hairline);padding:4rem 0 2.5rem}
+  footer img{width:min(320px,70vw)}
+
+  @media (prefers-reduced-motion:reduce){.float,.bolt{animation:none}.hero video{display:none}.hero{background:url(../public/media/campaign/seraph-poster.jpg) center/cover}}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <nav class="wrap nav" aria-label="Main">
+    <a href="#" aria-label="STREEZØWEAR home"><img src="../public/brand/wordmark-sm.webp" alt="STREEZØWEAR" width="725" height="90"></a>
+    <ul class="label">
+      <li><a href="#">Home</a></li><li><a href="#">Shop</a></li><li><a href="#">New Drops</a></li>
+      <li><a href="#">T-Shirts</a></li><li><a href="#">Hoodies</a></li><li><a href="#">About</a></li>
+    </ul>
+    <div class="icons">
+      <svg viewBox="0 0 24 24" aria-label="Search"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <svg class="hide-sm" viewBox="0 0 24 24" aria-label="Account"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>
+      <svg viewBox="0 0 24 24" aria-label="Wishlist"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      <span class="bag"><svg viewBox="0 0 24 24" aria-label="Bag"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg><b>2</b></span>
+      <button class="menu" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h12"/></svg></button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero" aria-label="Hero">
+  <video autoplay muted loop playsinline preload="metadata" poster="../public/media/campaign/seraph-poster.jpg">
+    <source src="../public/media/campaign/seraph-720.webm" type="video/webm" media="(max-width: 900px)">
+    <source src="../public/media/campaign/seraph-720.mp4" type="video/mp4" media="(max-width: 900px)">
+    <source src="../public/media/campaign/seraph-1080.mp4" type="video/mp4">
+  </video>
+  <div class="bolt" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="label red rule">Drop 01 · Bangalore</p>
+    <h1 class="display chrome">Own your street,<br>define your style.</h1>
+    <p class="muted">Premium oversized tees, released in limited drops. Made in Bangalore for people who wear their attitude.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem">
+      <a class="btn btn-primary" href="#showroom">Shop the latest drop</a>
+      <a class="btn btn-ghost" href="#story">The story</a>
+    </div>
+  </div>
+</section>
+
+<section id="showroom">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <p class="label red rule">The showroom</p>
+        <h2 class="display">Neon on night.</h2>
+      </div>
+      <p class="muted" style="max-width:30rem">Move across a piece. Red light finds the print.
+        <span class="sample">Sample prices &amp; copy</span></p>
+    </div>
+    <div class="showroom">
+      <a class="piece" href="#" style="--d:0s">
+        <span class="badge label">Limited</span>
+        <div class="stage"><div class="float"><div class="garment" style="--mask:url(../public/media/products/seraph-angel-tee-cutout-600.webp)"><img src="../public/media/products/seraph-angel-tee-cutout-1200.webp" alt="Seraph tee — stone angel with crystal-detailed wings on washed black" width="1200" height="1094" loading="lazy"></div></div></div>
+        <div class="meta"><div><h3>Seraph</h3><p>Stone angel, crystal halo. Washed-black oversized tee.</p><span class="view label red">View product →</span></div><span class="price">₹ —</span></div>
+      </a>
+      <a class="piece" href="#" style="--d:-2s">
+        <span class="badge label">New drop</span>
+        <div class="stage"><div class="float"><div class="garment" style="--mask:url(../public/media/products/blood-moon-cathedral-tee-cutout-600.webp)"><img src="../public/media/products/blood-moon-cathedral-tee-cutout-1200.webp" alt="Blood Moon tee — gothic cathedral under a red moon on washed black" width="1200" height="1147" loading="lazy"></div></div></div>
+        <div class="meta"><div><h3>Blood Moon</h3><p>Gothic spires under a red moon. Washed-black oversized tee.</p><span class="view label red">View product →</span></div><span class="price">₹ —</span></div>
+      </a>
+      <a class="piece" href="#" style="--d:-4s">
+        <span class="badge label">Limited</span>
+        <div class="stage"><div class="float"><div class="garment vignette" style="--mask:radial-gradient(60% 60% at 50% 50%,#000 60%,transparent 100%)"><img src="../public/media/products/velvet-portrait-longsleeve-1600.webp" alt="Velvet long sleeve — crystal portrait in red and silver" width="1600" height="1600" loading="lazy"></div></div></div>
+        <div class="meta"><div><h3>Velvet Portrait</h3><p>Crystal portrait on black velvet. Long sleeve.</p><span class="view label red">View product →</span></div><span class="price">₹ —</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="story" style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><div><p class="label red rule">The story</p><h2 class="display">From the street up.</h2></div></div>
+    <div class="chapters">
+      <div class="chapter"><span class="label red">01 — The street</span><h3>Born in Bangalore</h3><p>Night roads, sodium light, neon cutting through. That's where the look comes from.</p></div>
+      <div class="chapter"><span class="label red">02 — The drop</span><h3>Limited run</h3><p>Every design drops once. When the run is gone, it's gone. Don't sleep.</p></div>
+      <div class="chapter"><span class="label red">03 — Make it yours</span><h3>Customisation</h3><p>Your name, your mark, your street. Built to order. <span class="sample">Scope to confirm</span></p></div>
+      <div class="chapter"><span class="label red">04 — 60 minutes</span><h3>At your door</h3><p>Order in serviceable Bangalore PIN codes and it's on you within the hour. <span class="sample">Zones to confirm</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="drop" aria-label="Drop callout" style="padding:0">
+  <video autoplay muted loop playsinline preload="none" poster="../public/media/campaign/velvet-poster.jpg">
+    <source src="../public/media/campaign/velvet-720.webm" type="video/webm">
+    <source src="../public/media/campaign/velvet-720.mp4" type="video/mp4">
+  </video>
+  <div class="copy">
+    <p class="label red rule">Drop 02 · Velvet</p>
+    <h2 class="display chrome">Next drop.<br>Stay locked in.</h2>
+    <div class="count" aria-label="Countdown (sample)">
+      <div><b>04</b><span class="label muted">Days</span></div><div><b>12</b><span class="label muted">Hrs</span></div><div><b>38</b><span class="label muted">Min</span></div>
+    </div>
+    <p class="muted">Launch date set from the admin dashboard. <span class="sample">Sample countdown</span></p>
+    <div><a class="btn btn-ghost" href="#">Notify me</a></div>
+  </div>
+</section>
+
+<section id="tokens">
+  <div class="wrap">
+    <div class="head"><div><p class="label red rule">Design system</p><h2 class="display">Black first.</h2></div><p class="muted">70% black · 20% chrome · 10% red. Red is a spotlight, not a paint bucket.</p></div>
+    <div class="swatches">
+      <div class="sw" style="background:#07070a"><strong>Void</strong>#07070A · page</div>
+      <div class="sw" style="background:#131318"><strong>Carbon</strong>#131318 · surfaces</div>
+      <div class="sw" style="background:#3b3e45"><strong>Gunmetal</strong>#3B3E45 · borders</div>
+      <div class="sw" style="background:#888c96;color:#07070a"><strong>Steel</strong>#888C96 · muted text</div>
+      <div class="sw" style="background:#e8e8ec;color:#07070a"><strong>Chrome</strong>#E8E8EC · text</div>
+      <div class="sw" style="background:#a01529"><strong>Blood</strong>#A01529 · fills only</div>
+      <div class="sw" style="background:#ff1e3c;color:#07070a"><strong>Neon</strong>#FF1E3C · signature</div>
+    </div>
+    <div class="types">
+      <div class="type"><p class="label red">Display</p><p class="display" style="font-size:3rem">Drop 01</p><p class="muted">Archivo 900 italic, caps, −0.02em</p></div>
+      <div class="type"><p class="label red">Labels</p><p class="label" style="font-size:1rem;margin:1rem 0">Oversized • Unisex</p><p class="muted">JetBrains Mono 500 italic, caps, 0.3em</p></div>
+      <div class="type"><p class="label red">Body</p><p style="font-size:1.1rem">Heavyweight cotton, drop shoulders, a boxy fit that hangs right.</p><p class="muted">Inter 400 / 600, sentence case</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;align-items:end;gap:2rem;flex-wrap:wrap">
+    <img src="../public/brand/logo-primary-900.webp" alt="STREEZØWEAR — Own your street, define your style" width="900" height="900" loading="lazy">
+    <p class="label muted">Welcome to the street. Wear it loud.</p>
+  </div>
+</footer>
+
+<script>
+  // Header: transparent → void on scroll
+  const hdr = document.getElementById('hdr');
+  addEventListener('scroll', () => hdr.classList.toggle('scrolled', scrollY > 24), { passive: true });
+
+  // Cursor tilt + light position. Disabled for reduced motion; touch uses tap-to-light (focus).
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const MAX = 8;
+  document.querySelectorAll('.piece').forEach(piece => {
+    const g = piece.querySelector('.garment'), stage = g;
+    let raf = 0;
+    piece.addEventListener('pointermove', e => {
+      if (reduce || e.pointerType !== 'mouse') return;
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        g.style.setProperty('--ry', ((x - .5) * 2 * MAX).toFixed(2) + 'deg');
+        g.style.setProperty('--rx', ((.5 - y) * 2 * MAX).toFixed(2) + 'deg');
+        stage.style.setProperty('--lx', (x * 100).toFixed(1) + '%');
+        stage.style.setProperty('--ly', Math.max(5, y * 100 - 15).toFixed(1) + '%');
+      });
+    });
+    piece.addEventListener('pointerleave', () => { g.style.removeProperty('--rx'); g.style.removeProperty('--ry'); });
+  });
+</script>
+</body>
+</html>
