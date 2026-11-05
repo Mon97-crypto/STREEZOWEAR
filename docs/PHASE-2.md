@@ -1,0 +1,72 @@
+# Phase 2: Storefront experience
+
+## Owner decisions applied
+
+| Decision | Where it lives |
+|---|---|
+| 60-min delivery: 8–10 km from Muthanallur Cross, Dommasandra | `lib/delivery/express.ts`: radius 10 km, PIN allowlist, haversine check ready for Phase 4 |
+| Customisation: both (text on fixed spots + artwork for quote) | `lib/customise/options.ts`, `/customise` |
+| Velvet portrait: owner's likeness, rights confirmed | Named **Rugged Boy Velvet**, lead piece of Drop 01 |
+| ₹499 tees, ₹799 full-hand velvet; S–XL; 15/size; cotton-polyester; 250 GSM | `lib/catalog/data.ts` (enforced by `tests/unit/catalog.test.ts`) |
+| Drop 01: Rugged Boyz | `lib/catalog/data.ts` → `/drops/rugged-boyz` |
+| Company "Streezowear", Bangalore, Karnataka, dummy phone | `lib/config/business.ts` |
+
+## What was built
+
+- **Next.js 15 App Router + TypeScript (strict) + Tailwind 4 + Motion.** Fonts are self-hosted
+  (Archivo, JetBrains Mono, Inter), and every page is statically prerendered (32 routes).
+- **Brand:** logo loader (S mark + bolt strike, first visit per session), sticky header (transparent
+  over film, then Void on scroll), full mobile menu, footer lockup.
+- **Homepage story:** hero film → showroom → four chapters (street, drop, make it yours, 60 minutes)
+  → velvet drop film → craft facts → customise + 60-min PIN check → lineup.
+- **Floating showroom (`FloatingGarment`):** idle float, spring-smoothed cursor tilt (≤ 8°), red light
+  masked to the garment silhouette, lift and edge glow. On touch screens the piece lights as it reaches
+  mid-screen and the light drifts on its own. Reduced motion: static.
+- **Catalogue:** `/shop` and 6 category pages with sort, and an honest empty state for hoodies and
+  sweatshirts. Badges: New drop, Limited, Out of stock, Sale.
+- **Product pages** `/products/[slug]`: gallery (cutout, studio photo, film-frame detail shots, film),
+  hover zoom and full-screen zoom, colour and size, per-size stock with "only N left", quantity
+  clamped to stock, add to bag with feedback, buy now, wishlist, sticky mobile add-to-bag,
+  60-min PIN check, fabric/GSM/fit, shipping and returns, related pieces, reviews section, Product JSON-LD.
+- **Drops:** `/drops` index and an editorial `/drops/rugged-boyz` (film hero, story, showroom,
+  alternating close-up rows, lineup). Countdown appears automatically for scheduled drops.
+- **Customise:** (A) live SVG preview of your text on left chest, upper back or sleeve, in display or
+  mono type, chrome or neon. (B) Artwork request form with Zod validation, PNG/JPG/PDF only (no SVG),
+  15 MB limit.
+- **Bag:** drawer and `/cart`, change size, change quantity, remove. Stock is shared across plain and
+  custom lines of the same SKU. Wishlist and search.
+- **Pages:** about (from the brand book), contact, FAQs, size guide, shipping, returns, privacy, terms,
+  track, account, 404. Policy pages are marked **Draft** and placeholders are visibly dashed.
+- **SEO:** unique titles and descriptions, canonical URLs, Open Graph, sitemap.xml, robots.txt.
+  **noindex until `NEXT_PUBLIC_SITE_INDEXABLE=true`.**
+- **Security headers:** CSP, HSTS, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy.
+- **Fixed:** the two campaign films were mislabelled in Phase 1 (seraph ↔ velvet). Names are now correct.
+
+## Honest limits (by design until later phases)
+
+| Not live yet | Why | Phase |
+|---|---|---|
+| Checkout button | Needs Razorpay + server-side pricing and stock reservation | 4 |
+| Text customisation add-to-bag | Add-on **price not set** (`TEXT_ADDON_PAISE = null`) | when priced |
+| Artwork upload submit | Needs private storage, server-side file checks, admin inbox | 3 |
+| Accounts, order tracking, reviews | Need Supabase Auth and the database | 3–4 |
+| Stock decrements | Stock is the static 15/size until the inventory tables exist | 3 |
+| Bag / wishlist | Saved in this browser only; moves server-side with accounts | 3 |
+
+## Tested
+
+- `npm run typecheck`: clean. `npm test`: 20/20 (cart stock rules, catalogue facts, media files exist,
+  PIN and radius logic, money formatting, customisation and upload validation).
+- `npm run build`: 32 static routes. `npm audit --omit=dev`: 0 vulnerabilities (PostCSS pinned via override).
+- Browser (production build): homepage, product, drop, shop, customise, add-to-bag flow, hover light,
+  mobile (iPhone 13) home, product and menu. No console errors, no horizontal overflow at 390 px.
+
+## Needed from you
+
+1. **Text customisation price** (add-on per piece) → unlocks custom add-to-bag.
+2. **Exact dispatch coordinates** (drop a Google Maps pin) and confirmation of the express PINs
+   (562125, 560035, 560087, 560103 are candidates), plus delivery hours and the express fee.
+3. **Size chart** (chest, length and shoulder per size) for the size guide.
+4. **Return window and COD**: currently placeholders (7 days, COD off).
+5. Real **support email, phone, Instagram handle**, and the **Drop 01 launch date** if you want it shown.
+6. Rename any product if you prefer: *Seraph*, *Blood Moon*, *Rugged Boy Velvet*.

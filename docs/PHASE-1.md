@@ -1,6 +1,6 @@
 # STREEZØWEAR — Phase 1: Asset Audit, Design System & Architecture
 
-Status: **Phase 1 complete. Waiting on the owner's decisions (§9) before Phase 2.**
+Status: **Phase 1 complete.** Decisions in §9 were answered; see `docs/PHASE-2.md`.
 Nothing here is application code yet. This phase fixes the brand rules, the asset pipeline,
 the technical architecture and the data model so later phases do not have to be redone.
 

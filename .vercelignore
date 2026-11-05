@@ -1,5 +1,5 @@
-# Originals and tooling are not served (keeps the deploy small and the brand book private)
+# Originals and tooling are not deployed (keeps the deploy small and the brand book private)
 assets/
-scripts/
+scripts/assets/
 docs/
-README.md
+design/styleboard.html
