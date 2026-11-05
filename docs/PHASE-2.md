@@ -42,6 +42,20 @@
 - **Security headers:** CSP, HSTS, X-Frame-Options DENY, nosniff, Referrer-Policy, Permissions-Policy.
 - **Fixed:** the two campaign films were mislabelled in Phase 1 (seraph ↔ velvet). Names are now correct.
 
+## Update: floating store and street ambience
+
+- **Floating store** (`components/motion/FloatingStore.tsx`) replaces the showroom grid on the homepage,
+  modelled on the owner's reference video: garments hang on a slow 3D orbit and overlap like a rack,
+  the front piece is largest and catches the red light, back pieces are smaller, dimmer and softly blurred.
+  Drag or swipe to spin (with inertia), use the arrows or the keyboard to step, and hover to pause.
+  Clicking a piece brings it forward: big floating garment, giant outline name behind it, price, size
+  picker, add to bag, view product, previous and next. Escape returns to the rack.
+- **Street ambience** (`components/brand/StreetAmbient.tsx`) sits behind every store page: typed neon
+  signage ("NEW DROP. LIMITED RUN.", "60 MIN · DOMMASANDRA"…), a blinking REC · LIVE indicator, a live
+  Bangalore clock, flickering codes, street glyphs (bolt, crosshair, arrow, barcode, hazard), falling
+  red light streaks, a slow scan line, a faint street grid and breathing red haze. On phones only the
+  glyphs and light effects show, so text never collides with content. Reduced motion makes it static.
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |

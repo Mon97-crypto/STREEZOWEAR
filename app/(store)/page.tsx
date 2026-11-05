@@ -4,7 +4,7 @@ import { BoltSlash, RuleLabel } from "@/components/brand/RuleLabel";
 import { CampaignVideo } from "@/components/motion/CampaignVideo";
 import { Reveal } from "@/components/motion/Reveal";
 import { ExpressCheck } from "@/components/store/ExpressCheck";
-import { ProductCard } from "@/components/store/ProductCard";
+import { FloatingStore } from "@/components/motion/FloatingStore";
 import { getDrop, getDropProducts } from "@/lib/catalog/queries";
 import { business } from "@/lib/config/business";
 import { EXPRESS } from "@/lib/delivery/express";
@@ -62,15 +62,9 @@ export default async function Home() {
               <RuleLabel>The showroom</RuleLabel>
               <h2 className="display mt-4 text-[clamp(2.5rem,6vw,5rem)]">Neon on night.</h2>
             </div>
-            <p className="max-w-sm text-steel">Move across a piece. Red light finds the print.</p>
+            <p className="max-w-sm text-steel">The floating store. Spin the rack, pick a piece, and the red light finds the print.</p>
           </Reveal>
-          <div className="grid gap-x-[clamp(1rem,3vw,3rem)] gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-            {pieces.map((p, i) => (
-              <Reveal key={p.slug} delay={i * 0.08}>
-                <ProductCard product={p} phase={i * 2} priority={i === 0} />
-              </Reveal>
-            ))}
-          </div>
+          <FloatingStore products={pieces} kicker={`Drop ${drop.number}`} />
         </div>
       </section>
 
