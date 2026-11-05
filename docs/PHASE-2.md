@@ -56,6 +56,20 @@
   red light streaks, a slow scan line, a faint street grid and breathing red haze. On phones only the
   glyphs and light effects show, so text never collides with content. Reduced motion makes it static.
 
+## Update: eight lineup tees added
+
+Villain Era, Doomsday, Lucifer, Heaven Falls, Born to Sin, Paradise Lost, The End Is Near and No Saints Left
+are now products in Drop 01 and hang on the floating rack (11 pieces). They use the owner facts: ₹499,
+S–XL, 15 per size, cotton-polyester, 250 GSM. Lucifer and Heaven Falls are marked Limited (change in
+`lib/catalog/data.ts`).
+
+- Cut from the single 8-tee group photo with `scripts/assets/cutout_lineup8.py` (BiRefNet segmentation on a
+  gamma-lifted copy, fabric-colour seam separation, hem hull fill, manual trims). Masters are in
+  `assets/source/products/cutouts-lineup8/`.
+- **Limits:** each cutout is ~390×490 px, so it's sharp on the rack but soft when enlarged on a product
+  page. Where tees overlap in the photo, the hidden sleeve isn't there to recover (Doomsday left,
+  Lucifer right, Paradise Lost left). Individual front/back photos of each tee will fix both.
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |

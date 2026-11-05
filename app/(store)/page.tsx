@@ -156,7 +156,7 @@ export default async function Home() {
       <section className="pb-8">
         <div className="wrap">
           <Reveal className="relative overflow-hidden">
-            <Image src="/media/products/lineup-five-tees-1312.webp" alt="STREEZØWEAR lineup on concrete" width={1312} height={1199} sizes="100vw" className="h-auto w-full opacity-80" />
+            <Image src="/media/products/lineup-eight-tees-1556.webp" alt="The STREEZØWEAR lineup: eight crystal-detailed oversized tees" width={1556} height={1038} sizes="100vw" className="h-auto w-full opacity-80" />
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-void via-void/70 to-transparent p-[clamp(1.5rem,5vw,4rem)]">
               <p className="label text-neon">{business.shortTagline}</p>
               <p className="display mt-3 text-[clamp(2rem,5vw,4.5rem)]">Stay locked in.<br />Next drop soon.</p>

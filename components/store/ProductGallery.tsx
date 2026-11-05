@@ -63,7 +63,7 @@ export function ProductGallery({ name, images, video }: { name: string; images: 
                   height={cur.media.height}
                   priority={i === 0}
                   sizes="(max-width: 1024px) 100vw, 55vw"
-                  className={`h-full w-full transition-transform duration-200 ${cur.media.kind === "cutout" ? "object-contain p-[8%]" : "object-cover"}`}
+                  className={`h-full w-full transition-transform duration-200 ${cur.media.kind === "cutout" ? (cur.media.width < 800 ? "object-contain p-[16%]" : "object-contain p-[8%]") : cur.media.kind === "image" && cur.media.width / cur.media.height > 1.2 ? "object-contain" : "object-cover"}`}
                   style={zoom ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
                 />
               </button>

@@ -4,7 +4,7 @@
  * Drop 01 "Rugged Boyz". Product names and descriptive copy are written from the artwork and can be
  * renamed. Phase 3 replaces this module with Supabase queries behind lib/catalog/queries.ts.
  */
-import type { Category, Drop, Product, Variant } from "./types";
+import type { Category, Colour, Drop, Product, Variant } from "./types";
 import { rupees } from "@/lib/pricing/format";
 
 const SIZES = ["S", "M", "L", "XL"] as const;
@@ -128,6 +128,60 @@ export const products: Product[] = [
   },
 ];
 
+/**
+ * Lineup tees (owner-supplied 8-tee lineup photo). Same owner facts as the launch tees:
+ * ₹499, S–XL, 15 per size, cotton/polyester, 250 GSM. Imagery is cut from a single group shot,
+ * so each piece currently has one view; individual photos will replace these.
+ */
+type LineupSpec = { id: string; name: string; short: string; line: string; colour: Colour; code: string; size: [number, number]; limited?: boolean };
+
+const WASHED_BLACK: Colour = { name: "Washed Black", hex: "#2a2a2e" };
+const BLACK: Colour = { name: "Black", hex: "#0c0c0e" };
+const OFF_WHITE: Colour = { name: "Off-White", hex: "#e9e4da" };
+const BLOOD: Colour = { name: "Blood Red", hex: "#6e0f1c" };
+
+const LINEUP: LineupSpec[] = [
+  { id: "villain-era", name: "Villain Era", short: "Stone angel under the gothic crest. Oversized tee.", line: "A stone angel with wings spread wide under a gothic STREEZOWEAR crest, traced in crystal on black.", colour: BLACK, code: "VILLAIN", size: [427, 492] },
+  { id: "doomsday", name: "Doomsday", short: "Falling angel in red thorns. Oversized tee.", line: "A falling angel wrapped in red thorns, the gothic crest burning above. Crystal-detailed on off-white.", colour: OFF_WHITE, code: "DOOMSDAY", size: [388, 477] },
+  { id: "lucifer", name: "Lucifer", short: "Marble face crowned in thorns. Oversized tee.", line: "A cracked marble face under a crown of thorns, red veins running through the stone. Crystal-detailed on black.", colour: BLACK, code: "LUCIFER", size: [392, 484], limited: true },
+  { id: "heaven-falls", name: "Heaven Falls", short: "Winged figure on blood red. Oversized tee.", line: "A winged figure over the gothic crest, crystal lines running down a deep blood-red wash.", colour: BLOOD, code: "HEAVEN", size: [385, 485], limited: true },
+  { id: "born-to-sin", name: "Born to Sin", short: "Serpent and winged blade. Oversized tee.", line: "A serpent coiled round a winged blade, set in crystal on off-white.", colour: OFF_WHITE, code: "BORNSIN", size: [427, 489] },
+  { id: "paradise-lost", name: "Paradise Lost", short: "Hooded angel in mourning. Oversized tee.", line: "A hooded angel in mourning under a crystal halo and the gothic crest. Black.", colour: BLACK, code: "PARADISE", size: [319, 496] },
+  { id: "the-end-is-near", name: "The End Is Near", short: "Cathedral under a blood moon. Oversized tee.", line: "Spires rising under a blood moon beneath the gothic crest, crystal lines through the night sky. Washed black.", colour: WASHED_BLACK, code: "ENDNEAR", size: [439, 498] },
+  { id: "no-saints-left", name: "No Saints Left", short: "Gothic cross in thorns. Oversized tee.", line: "A gothic cross wrapped in thorns under the crest, crystal-detailed on off-white.", colour: OFF_WHITE, code: "NOSAINTS", size: [379, 491] },
+];
+
+const lineupProducts: Product[] = LINEUP.map((t) => ({
+  id: t.id,
+  slug: `${t.id}-oversized-tee`,
+  name: t.name,
+  short: t.short,
+  description: [t.line, "Drop shoulders, a boxy fit that hangs right."],
+  categories: ["t-shirts", "oversized-t-shirts", "new-arrivals", ...(t.limited ? ["limited-edition"] : [])],
+  drop: "rugged-boyz",
+  pricePaise: rupees(499),
+  salePricePaise: null,
+  isNew: true,
+  isLimited: !!t.limited,
+  isFeatured: true,
+  isCustomisable: true,
+  fabric: "Cotton, polyester",
+  gsm: 250,
+  fit: "Oversized, drop shoulder",
+  details: ["Crystal-detailed graphic", "Gothic STREEZOWEAR crest", "Ribbed crew neck"],
+  colours: [t.colour],
+  sizes: [...SIZES],
+  variants: variants(t.code, t.colour.name, t.colour.name === "Off-White" ? "OWHT" : t.colour.name === "Blood Red" ? "BLD" : t.colour.name === "Black" ? "BLK" : "WBLK"),
+  cutout: { src: `${P}/${t.id}-cutout.webp`, alt: `${t.name} oversized tee — ${t.short.replace(/\. Oversized tee\.$/, "").toLowerCase()}`, width: t.size[0], height: t.size[1], kind: "cutout" },
+  images: [
+    { src: `${P}/${t.id}-cutout.webp`, alt: `${t.name} oversized tee, front`, width: t.size[0], height: t.size[1], kind: "cutout" },
+    { src: `${P}/lineup-eight-tees-1556.webp`, alt: "The STREEZØWEAR lineup: eight crystal-detailed oversized tees", width: 1556, height: 1038, kind: "image" },
+  ],
+  video: null,
+}));
+
+products.push(...lineupProducts);
+
 export const drops: Drop[] = [
   {
     slug: "rugged-boyz",
@@ -136,16 +190,28 @@ export const drops: Drop[] = [
     status: "live",
     launchAt: null, // PLACEHOLDER — set the official launch date
     headline: "Rugged Boyz.",
-    intro: "Drop 01. Stone angels, blood moons and the face behind the brand, set in crystal on black.",
+    intro: "Drop 01. Stone angels, blood moons, serpents, saints and the face behind the brand, set in crystal.",
     story: [
-      "Rugged Boyz is where STREEZØWEAR starts. Three pieces, each one built around a single image and finished by hand in crystal.",
-      "Heavyweight 250 GSM, washed black and velvet. Limited run. When the run is gone, it's gone.",
+      "Rugged Boyz is where STREEZØWEAR starts. Eleven pieces, each one built around a single image and finished in crystal.",
+      "Heavyweight 250 GSM in black, washed black, off-white, blood red and velvet. Limited run. When the run is gone, it's gone.",
     ],
     video: { desktop: "/media/campaign/seraph-1080.mp4", mobile: "/media/campaign/seraph-720.mp4", mobileWebm: "/media/campaign/seraph-720.webm", poster: "/media/campaign/seraph-poster.jpg" },
     stills: [
-      { src: "/media/products/lineup-five-tees-1312.webp", alt: "STREEZØWEAR lineup on concrete", width: 1312, height: 1199, kind: "image" },
+      { src: "/media/products/lineup-eight-tees-1556.webp", alt: "The STREEZØWEAR lineup: eight crystal-detailed oversized tees", width: 1556, height: 1038, kind: "image" },
     ],
-    products: ["seraph-oversized-tee", "rugged-boy-velvet-full-sleeve-tee", "blood-moon-oversized-tee"],
+    products: [
+      "seraph-oversized-tee",
+      "villain-era-oversized-tee",
+      "rugged-boy-velvet-full-sleeve-tee",
+      "doomsday-oversized-tee",
+      "lucifer-oversized-tee",
+      "blood-moon-oversized-tee",
+      "heaven-falls-oversized-tee",
+      "born-to-sin-oversized-tee",
+      "paradise-lost-oversized-tee",
+      "the-end-is-near-oversized-tee",
+      "no-saints-left-oversized-tee",
+    ],
     isLimited: true,
   },
 ];

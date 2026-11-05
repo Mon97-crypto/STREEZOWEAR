@@ -86,8 +86,10 @@ export function FloatingStore({ products, kicker }: { products: Product[]; kicke
     }
   });
 
-  const radius = w < 640 ? w * 0.34 : Math.min(w * 0.3, 460);
-  const itemW = w < 640 ? Math.min(w * 0.58, 300) : Math.min(w * 0.27, 400);
+  // more pieces → wider orbit, slightly smaller garments, so the rack stays readable
+  const crowd = Math.min(1, Math.max(0, (N - 6) / 8));
+  const radius = w < 640 ? w * (0.34 + crowd * 0.08) : Math.min(w * (0.3 + crowd * 0.07), 460 + crowd * 120);
+  const itemW = w < 640 ? Math.min(w * (0.58 - crowd * 0.1), 300) : Math.min(w * (0.27 - crowd * 0.04), 400 - crowd * 60);
 
   const stepBy = useCallback(
     (dir: 1 | -1) => {
@@ -227,7 +229,7 @@ export function FloatingStore({ products, kicker }: { products: Product[]; kicke
             {frontProduct.name} <span className="label ml-2 text-[0.7rem] text-neon">{formatINR(frontProduct.salePricePaise ?? frontProduct.pricePaise)}</span>
           </p>
         </div>
-        <div className="flex items-center gap-2" aria-hidden>
+        <div className="hidden items-center gap-2 sm:flex" aria-hidden>
           {products.map((p, k) => (
             <span key={p.slug} className={`h-1.5 transition-all duration-300 ${k === frontIdx ? "w-6 bg-neon shadow-[0_0_8px_var(--sw-neon-glow)]" : "w-1.5 bg-gunmetal"}`} />
           ))}
