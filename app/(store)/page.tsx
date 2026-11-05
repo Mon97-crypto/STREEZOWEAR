@@ -156,9 +156,9 @@ export default async function Home() {
       <section className="pb-8">
         <div className="wrap">
           <Reveal className="relative overflow-hidden">
-            <Image src="/media/products/lineup-eight-tees-1556.webp" alt="The STREEZØWEAR lineup: eight crystal-detailed oversized tees" width={1556} height={1038} sizes="100vw" className="h-auto w-full opacity-80" />
+            <Image src="/media/products/lineup-five-tees-1312.webp" alt="Next drop preview: Villain, Doomsday, Lucifer, Apocalypse and Rebel Forever tees on concrete" width={1312} height={1199} sizes="100vw" className="h-auto w-full opacity-80 sm:h-[min(82vh,860px)] sm:object-cover sm:object-[50%_45%]" />
             <div className="pt-6 sm:absolute sm:inset-x-0 sm:bottom-0 sm:bg-gradient-to-t sm:from-void sm:via-void/70 sm:to-transparent sm:p-[clamp(1.5rem,5vw,4rem)]">
-              <p className="label text-neon">{business.shortTagline}</p>
+              <p className="label text-neon">Next drop · Coming soon</p>
               <p className="display mt-3 text-[clamp(2rem,5vw,4.5rem)]">Stay locked in.<br />Next drop soon.</p>
             </div>
           </Reveal>
