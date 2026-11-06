@@ -47,91 +47,89 @@ export const customExample: { name: string; video: Video; images: Media[] } = {
 export const brandFilm: Video = { desktop: "/media/campaign/seraph-1080.mp4", mobile: "/media/campaign/seraph-720.mp4", mobileWebm: "/media/campaign/seraph-720.webm", poster: "/media/campaign/seraph-poster.jpg" };
 
 /**
- * Drop 01 — The Origin Collection. Five oversized tees: logo on the front, full graphic on the back,
- * hit on the sleeve. Images are cut from the owner's collection boards (~300 px per view for now).
+ * Drop 01 — The Origin Collection. Oversized tees with a chest hit, a full back graphic and a sleeve print.
+ * Images are split from the owner's product sheets (scripts/assets/split_sheets.py), ~560–770 px per view.
+ * Add a piece: drop its views into public/media/products as <id>-<view>.webp and add a spec below.
  */
-type OriginSpec = {
-  id: string; no: string; name: string; tags: string; short: string; line: string;
+type View = "back" | "front" | "side" | "label";
+type DropSpec = {
+  id: string; name: string; tags: string; short: string; line: string;
   colour: Colour; code: string; cc: string;
-  sizes: Record<"front" | "back" | "side" | "art" | "detail", [number, number]>;
+  /** views in gallery order; the first is the face on the rack */
+  views: [View, number, number][];
 };
 
-const ORIGIN: OriginSpec[] = [
+const VIEW_LABEL: Record<View, string> = { back: "back", front: "front", side: "sleeve", label: "folded, neck label" };
+
+const DROP01: DropSpec[] = [
   {
-    id: "the-final-form", no: "01", name: "The Final Form", tags: "Anime / Transformation / Power",
-    short: "Lightning-eyed transformation. Oversized tee.",
-    line: "A white-haired fighter mid-transformation, blue lightning tearing through the back with 最終形態 running down the side.",
-    colour: { name: "Black", hex: "#0c0c0e" }, code: "FINALFORM", cc: "BLK",
-    sizes: { front: [292, 282], back: [299, 284], side: [146, 292], art: [479, 214], detail: [310, 214] },
+    id: "redline", name: "Redline", tags: "Racing / Tokyo / Night",
+    short: "Red-eyed racer, blood moon. Oversized tee.",
+    line: "A red-eyed racer with レッドライン down the chest; on the back, a black street car under a blood moon, pagoda and cherry blossom, with 赤線 REDLINE in brush script.",
+    colour: { name: "Red", hex: "#d4141e" }, code: "REDLINE", cc: "RED",
+    views: [["back", 769, 780], ["front", 762, 927]],
   },
   {
-    id: "the-last-hero", no: "02", name: "The Last Hero", tags: "Superhero / Origin / Rebellion",
-    short: "Lone vigilante under a blood moon. Oversized tee.",
-    line: "A lone caped figure against a blood moon over a burning skyline, THE LAST HERO slashed across the back.",
-    colour: { name: "Cream", hex: "#e8e0d0" }, code: "LASTHERO", cc: "CRM",
-    sizes: { front: [301, 283], back: [306, 284], side: [142, 285], art: [479, 233], detail: [310, 233] },
+    id: "violet-oni", name: "Violet Oni", tags: "Demon / Myth / Fire",
+    short: "Horned oni in violet fire. Oversized tee.",
+    line: "A horned oni with burning yellow eyes, hands pressed together in violet flame across the back, with violet fire running up the front and sleeve.",
+    colour: { name: "Purple", hex: "#4b1d8f" }, code: "VIOLETONI", cc: "PRP",
+    views: [["back", 562, 599], ["front", 596, 606], ["side", 231, 614], ["label", 498, 503]],
   },
   {
-    id: "tokyo-speed-demon", no: "03", name: "Tokyo Speed Demon", tags: "Racing / Tokyo / Street culture",
+    id: "tokyo-speed-demon", name: "Tokyo Speed Demon", tags: "Racing / Tokyo / Street culture",
     short: "Night racer, car 07. Oversized tee.",
-    line: "A goggled racer and his 07 car tearing through Tokyo, chequered flags and 東京 across the back.",
+    line: "A spiky-haired racer and his 07 car tearing through Tokyo, chequered flags and 東京 across the back, 07 on the chest.",
     colour: { name: "Orange", hex: "#e8601c" }, code: "SPEEDDEMON", cc: "ORG",
-    sizes: { front: [300, 276], back: [308, 275], side: [143, 277], art: [479, 222], detail: [310, 222] },
+    views: [["back", 571, 591], ["front", 604, 590], ["side", 227, 596], ["label", 502, 510]],
   },
   {
-    id: "the-dark-side", no: "04", name: "The Dark Side", tags: "Gothic / Supernatural / Fallen",
-    short: "Fallen angel, red halo. Oversized tee.",
-    line: "A fallen angel with torn black wings under a red halo, THE DARK SIDE dripping beneath it.",
-    colour: { name: "White", hex: "#f2f0ec" }, code: "DARKSIDE", cc: "WHT",
-    sizes: { front: [290, 276], back: [311, 278], side: [137, 279], art: [479, 226], detail: [310, 226] },
-  },
-  {
-    id: "main-character-energy", no: "05", name: "Main Character Energy", tags: "Anime pop / Gen Z / Bold",
+    id: "main-character-energy", name: "Main Character Energy", tags: "Anime pop / Gen Z / Bold",
     short: "Pink shades, bubblegum, neon stars. Oversized tee.",
-    line: "Pink shades, a bubblegum pop and neon stars, with ヒーロー across the top of the back.",
+    line: "Pink shades, a bubblegum pop and blue lightning, with ヒーロー across the top of the back and a neon star on the chest and sleeve.",
     colour: { name: "Cobalt Blue", hex: "#1f3fd1" }, code: "MAINCHAR", cc: "CBLT",
-    sizes: { front: [301, 284], back: [305, 286], side: [140, 287], art: [479, 235], detail: [310, 235] },
+    views: [["back", 563, 606], ["front", 606, 607], ["side", 225, 608], ["label", 505, 492]],
+  },
+  {
+    id: "the-last-hero", name: "The Last Hero", tags: "Superhero / Origin / Rebellion",
+    short: "Lone vigilante under a blood moon. Oversized tee.",
+    line: "A lone caped figure against a blood moon over a burning skyline, THE LAST HERO slashed across the back, red thorns up the front.",
+    colour: { name: "Cream", hex: "#e8e0d0" }, code: "LASTHERO", cc: "CRM",
+    views: [["back", 563, 608], ["front", 611, 616], ["side", 229, 614], ["label", 491, 492]],
   },
 ];
 
-const originProducts: Product[] = ORIGIN.map((t) => {
-  const m = (view: keyof OriginSpec["sizes"], alt: string, kind: Media["kind"]): Media => ({
-    src: `${P}/${t.id}-${view}.webp`, alt, width: t.sizes[view][0], height: t.sizes[view][1], kind,
-  });
-  return {
-    id: t.id,
-    slug: `${t.id}-oversized-tee`,
-    name: t.name,
-    short: t.short,
-    description: [t.line, `${t.tags}. Logo on the chest, full graphic on the back, a hit on the sleeve. Drop shoulders, a boxy fit that hangs right.`],
-    categories: ["t-shirts", "oversized-t-shirts", "new-arrivals"],
-    drop: "origin-collection",
-    pricePaise: rupees(499),
-    salePricePaise: null,
-    isNew: true,
-    isLimited: false,
-    isFeatured: true,
-    isCustomisable: true,
-    fabric: "Cotton, polyester",
-    gsm: 250,
-    fit: "Oversized, drop shoulder",
-    details: ["Back graphic", "Chest logo", "Sleeve print", "Ribbed crew neck"],
-    colours: [t.colour],
-    sizes: [...SIZES],
-    variants: variants(t.code, t.colour.name, t.cc),
-    cutout: m("back", `${t.name} oversized tee, back graphic`, "cutout"),
-    images: [
-      m("back", `${t.name} oversized tee, back`, "cutout"),
-      m("front", `${t.name} oversized tee, front`, "cutout"),
-      m("side", `${t.name} oversized tee, sleeve`, "cutout"),
-      m("detail", `${t.name}: print close-up`, "detail"),
-      m("art", `${t.name}: the artwork. ${t.tags}`, "image"),
-    ],
-    video: null,
-  };
+const dropMedia = (t: DropSpec, [v, w, h]: [View, number, number]): Media => ({
+  src: `${P}/${t.id}-${v}.webp`, alt: `${t.name} oversized tee, ${VIEW_LABEL[v]}`, width: w, height: h, kind: "cutout",
 });
 
-products.push(...originProducts);
+const drop01Products: Product[] = DROP01.map((t) => ({
+  id: t.id,
+  slug: `${t.id}-oversized-tee`,
+  name: t.name,
+  short: t.short,
+  description: [t.line, `${t.tags}. Drop shoulders, a boxy fit that hangs right.`],
+  categories: ["t-shirts", "oversized-t-shirts", "new-arrivals"],
+  drop: "origin-collection",
+  pricePaise: rupees(499),
+  salePricePaise: null,
+  isNew: true,
+  isLimited: false,
+  isFeatured: true,
+  isCustomisable: true,
+  fabric: "Cotton, polyester",
+  gsm: 250,
+  fit: "Oversized, drop shoulder",
+  details: ["Back graphic", "Chest print", "Sleeve print", "Ribbed crew neck"],
+  colours: [t.colour],
+  sizes: [...SIZES],
+  variants: variants(t.code, t.colour.name, t.cc),
+  cutout: dropMedia(t, t.views[0]!),
+  images: t.views.map((v) => dropMedia(t, v)),
+  video: null,
+}));
+
+products.push(...drop01Products);
 
 export const drops: Drop[] = [
   {
@@ -141,15 +139,15 @@ export const drops: Drop[] = [
     status: "live",
     launchAt: null, // PLACEHOLDER — set the official launch date
     headline: "The Origin Collection.",
-    intro: "Drop 01. Five stories, five tees: the final form, the last hero, a Tokyo speed demon, the dark side and main character energy.",
+    intro: "Drop 01. Redline, Violet Oni, Tokyo Speed Demon, Main Character Energy and The Last Hero. Big stories, printed on the back.",
     story: [
-      "The Origin Collection is where STREEZØWEAR starts. Five characters, each with their own story, printed big on the back.",
-      "Heavyweight 250 GSM oversized tees in black, cream, orange, white and cobalt. Logo on the chest, a hit on the sleeve. Limited run. When it's gone, it's gone.",
+      "The Origin Collection is where STREEZØWEAR starts. Every piece is built around one character and one story, printed big on the back.",
+      "Heavyweight 250 GSM oversized tees in red, purple, orange, cobalt and cream. A hit on the chest, a print on the sleeve. Limited run. When it's gone, it's gone.",
     ],
     video: null,
-    heroArt: ORIGIN.map((t) => ({ src: `${P}/${t.id}-detail.webp`, alt: "", width: t.sizes.detail[0], height: t.sizes.detail[1], kind: "detail" as const })),
-    stills: ORIGIN.map((t) => ({ src: `${P}/${t.id}-art.webp`, alt: `${t.no} ${t.name}: ${t.tags}`, width: t.sizes.art[0], height: t.sizes.art[1], kind: "image" as const })),
-    products: ORIGIN.map((t) => `${t.id}-oversized-tee`),
+    heroArt: DROP01.map((t) => ({ ...dropMedia(t, t.views[0]!), alt: "" })),
+    stills: [],
+    products: DROP01.map((t) => `${t.id}-oversized-tee`),
     isLimited: true,
   },
 ];

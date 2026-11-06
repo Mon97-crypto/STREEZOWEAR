@@ -110,8 +110,8 @@ export default async function Home() {
       <section className="py-[var(--sw-section)]">
         <div className="wrap grid items-center gap-12 lg:grid-cols-2">
           <Reveal className="grid grid-cols-2 gap-3">
-            <Image src="/media/products/tokyo-speed-demon-detail.webp" alt="Tokyo Speed Demon: close-up of the 07 print on orange cotton" width={310} height={222} sizes="(max-width:1024px) 45vw, 22vw" className="aspect-square h-auto w-full object-cover" />
-            <Image src="/media/products/the-dark-side-detail.webp" alt="The Dark Side: close-up of the printed face" width={310} height={226} sizes="(max-width:1024px) 45vw, 22vw" className="mt-12 aspect-square h-auto w-full object-cover" />
+            <Image src="/media/products/tokyo-speed-demon-label.webp" alt="Tokyo Speed Demon folded, showing the STREEZØWEAR neck label" width={502} height={510} sizes="(max-width:1024px) 45vw, 22vw" className="aspect-square h-auto w-full object-contain" />
+            <Image src="/media/products/violet-oni-label.webp" alt="Violet Oni folded, showing the STREEZØWEAR neck label" width={498} height={503} sizes="(max-width:1024px) 45vw, 22vw" className="mt-12 aspect-square h-auto w-full object-contain" />
           </Reveal>
           <Reveal>
             <RuleLabel>The craft</RuleLabel>

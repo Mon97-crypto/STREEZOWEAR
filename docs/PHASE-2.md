@@ -91,6 +91,15 @@ S–XL, 15 per size, cotton-polyester, 250 GSM. Lucifer and Heaven Falls are mar
 - **IP warning:** The Last Hero depicts Batman (cowl and bat emblem). The Final Form and Main Character Energy
   closely resemble existing anime characters. Get legal advice or redesign before selling.
 
+## Update: Drop 01 line-up replaced
+
+The rack and shop now carry only Redline, Violet Oni, Tokyo Speed Demon, Main Character Energy and The Last Hero
+(The Origin Collection, ₹499, S–XL ×15, cotton-poly 250 GSM). Images are split from the owner's product sheets
+with `scripts/assets/split_sheets.py` (transparent sheets split by alpha; the Redline sheet is on black and is
+segmented first). Views are ~560–770 px. Earlier Origin images (Final Form, Dark Side, art/detail panels) are removed.
+To add the next pieces: run the script on the new sheet, then add an entry to `DROP01` in `lib/catalog/data.ts`.
+"Violet Oni" is a working name.
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |
