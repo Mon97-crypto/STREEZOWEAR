@@ -77,8 +77,9 @@ S–XL, 15 per size, cotton-polyester, 250 GSM. Lucifer and Heaven Falls are mar
   floating rack. Each product has back, front and sleeve cutouts plus the print close-up and artwork panel
   from the collection board (`scripts/assets/cutout_origin.py`). The drop page uses the artwork as its hero
   (no film yet).
-- **The gothic crystal tees** (Seraph, Blood Moon and the 8-tee lineup) stay in the shop but belong to no drop
-  and aren't on the rack. The five-tee gothic image remains the "Next drop" teaser.
+- **The older gothic tees** (Seraph, Blood Moon and the 8-tee lineup) were later removed from the shop completely,
+  along with their web images (originals kept in `assets/source/`). The five-tee gothic image remains the
+  "Next drop" teaser.
 - **One of One** replaces the Rugged Boyz section: it's the custom-studio feature, keeping the velvet film. The
   velvet portrait tee is a customisation example only (`customExample` in `lib/catalog/data.ts`): no product
   page, not sellable, not on the rack (enforced by a test). `/customise` is titled One of One and shows it as an

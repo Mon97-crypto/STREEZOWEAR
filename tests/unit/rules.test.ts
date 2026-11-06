@@ -45,7 +45,7 @@ describe("customisation validation", () => {
     expect(validateArtworkFile({ name: "a.pdf", type: "application/pdf", size: 16 * 1024 * 1024 })).not.toBeNull();
   });
   it("artwork request requires a valid Indian mobile", () => {
-    const ok = { name: "Raj", email: "raj@example.com", phone: "+91 98765 43210", garment: "seraph-oversized-tee", size: "M", quantity: "2", placement: "back" };
+    const ok = { name: "Raj", email: "raj@example.com", phone: "+91 98765 43210", garment: "the-final-form-oversized-tee", size: "M", quantity: "2", placement: "back" };
     expect(artworkRequestSchema.safeParse(ok).success).toBe(true);
     expect(artworkRequestSchema.safeParse({ ...ok, phone: "12345" }).success).toBe(false);
   });

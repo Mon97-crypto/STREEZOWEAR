@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { addLine, changeSize, clampQty, lineKey, MAX_PER_LINE, qtyForSku, setQty, type CartLine } from "@/lib/cart/logic";
 
-const base = { slug: "seraph-oversized-tee", sku: "SZW-SERAPH-WBLK-M", size: "M", colour: "Washed Black", qty: 1 };
+const base = { slug: "tokyo-speed-demon-oversized-tee", sku: "SZW-SPEEDDEMON-ORG-M", size: "M", colour: "Orange", qty: 1 };
 
 describe("cart stock rules", () => {
   it("never adds more than stock", () => {
@@ -49,9 +49,9 @@ describe("cart stock rules", () => {
 
   it("changeSize moves the line to the new SKU and respects its stock", () => {
     const lines = addLine([], { ...base, qty: 4 }, 15).lines;
-    const moved = changeSize(lines, base.sku, { sku: "SZW-SERAPH-WBLK-L", size: "L" }, 2);
+    const moved = changeSize(lines, base.sku, { sku: "SZW-SPEEDDEMON-ORG-L", size: "L" }, 2);
     expect(moved).toHaveLength(1);
-    expect(moved[0]).toMatchObject({ sku: "SZW-SERAPH-WBLK-L", size: "L", qty: 2 });
+    expect(moved[0]).toMatchObject({ sku: "SZW-SPEEDDEMON-ORG-L", size: "L", qty: 2 });
   });
 
   it("clampQty handles fractional and negative input", () => {

@@ -17,7 +17,7 @@ export function SearchView() {
       <PageHead kicker="Search" title="Find it." />
       <div className="wrap">
         <label htmlFor="q" className="sr-only">Search products</label>
-        <input id="q" type="search" autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Angel, velvet, oversized…" className="field !min-h-16 !text-xl" />
+        <input id="q" type="search" autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Tokyo, hero, anime…" className="field !min-h-16 !text-xl" />
         <p className="label mt-4 text-steel" aria-live="polite">{q ? `${results.length} result${results.length === 1 ? "" : "s"}` : "Type to search"}</p>
         <div className="mt-10 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">{results.map((p, i) => <ProductCard key={p.slug} product={p} phase={i * 2} />)}</div>
       </div>
