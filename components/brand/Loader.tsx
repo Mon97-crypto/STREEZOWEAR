@@ -26,7 +26,7 @@ export function Loader() {
       {show && (
         <motion.div
           key="loader"
-          className="fixed inset-0 z-[90] grid place-items-center bg-void"
+          className="sw-dark fixed inset-0 z-[90] grid place-items-center bg-void"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.5, ease: [0.65, 0, 0.35, 1] } }}
           aria-hidden

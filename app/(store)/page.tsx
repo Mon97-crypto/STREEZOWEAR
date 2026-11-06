@@ -5,6 +5,7 @@ import { CampaignVideo } from "@/components/motion/CampaignVideo";
 import { Reveal } from "@/components/motion/Reveal";
 import { ExpressCheck } from "@/components/store/ExpressCheck";
 import { FloatingStore } from "@/components/motion/FloatingStore";
+import { brandFilm, customExample } from "@/lib/catalog/data";
 import { getDrop, getDropProducts } from "@/lib/catalog/queries";
 import { business } from "@/lib/config/business";
 import { EXPRESS } from "@/lib/delivery/express";
@@ -12,20 +13,19 @@ import { EXPRESS } from "@/lib/delivery/express";
 const CHAPTERS = [
   { n: "01", k: "The street", t: "Born in Bangalore", b: "Night roads, sodium light, neon cutting through the dark. That's where the look comes from." },
   { n: "02", k: "The drop", t: "Limited run", b: "Every design drops once. When the run is gone, it's gone. Don't sleep." },
-  { n: "03", k: "Make it yours", t: "Customisation", b: "Your name on the chest, or your own artwork on the back. Built to order." },
+  { n: "03", k: "Make it yours", t: "One of One", b: "Your name on the chest, or your own artwork made into a piece nobody else owns." },
   { n: "04", k: "60 minutes", t: "At your door", b: `Within ${EXPRESS.radiusKm} km of Dommasandra, your order can be on you inside the hour.` },
 ];
 
 export default async function Home() {
-  const drop = (await getDrop("rugged-boyz"))!;
+  const drop = (await getDrop("origin-collection"))!;
   const pieces = await getDropProducts(drop);
-  const velvet = pieces.find((p) => p.slug.startsWith("rugged-boy"));
 
   return (
     <>
       {/* ── Hero ───────────────────────────────────── */}
-      <section className="relative isolate grid min-h-[100svh] items-end overflow-hidden" aria-label="STREEZØWEAR">
-        <CampaignVideo video={drop.video} priority className="absolute inset-0 -z-20 h-full w-full object-cover opacity-75" />
+      <section className="sw-dark relative isolate grid min-h-[100svh] items-end overflow-hidden bg-void" aria-label="STREEZØWEAR">
+        <CampaignVideo video={brandFilm} priority className="absolute inset-0 -z-20 h-full w-full object-cover opacity-75" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(7_7_10/.6)_0%,rgb(7_7_10/.1)_40%,rgb(7_7_10/.92)_88%,var(--sw-void)_100%)]" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-void/50 sm:bg-transparent" />
         <BoltSlash className="top-[58%] -z-10" />
@@ -35,7 +35,7 @@ export default async function Home() {
             Own your street,<br />define your style.
           </h1>
           <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-steel">
-            Premium oversized tees, hand-finished in crystal and released in limited drops. Made in Bangalore for people who wear their attitude.
+            Premium oversized tees with big stories on the back, released in limited drops. Made in Bangalore for people who wear their attitude.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Link href={`/drops/${drop.slug}`} className="btn btn-primary">Shop the latest drop</Link>
@@ -87,36 +87,37 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Drop feature ───────────────────────────── */}
-      {velvet?.video && (
-        <section className="grid min-h-[80vh] bg-carbon lg:grid-cols-[1.1fr_1fr]" aria-label={`Drop ${drop.number}`}>
-          <div className="relative min-h-[55vh] overflow-hidden">
-            <CampaignVideo video={velvet.video} className="absolute inset-0 h-full w-full object-cover" />
+      {/* ── One of One (customisation) ─────────────── */}
+      <section className="sw-dark grid min-h-[80vh] bg-carbon text-chrome lg:grid-cols-[1.1fr_1fr]" aria-labelledby="one-of-one">
+        <div className="relative min-h-[55vh] overflow-hidden">
+          <CampaignVideo video={customExample.video} className="absolute inset-0 h-full w-full object-cover" />
+          <span className="label absolute bottom-4 left-4 border border-gunmetal bg-void/70 px-2.5 py-1.5 text-[0.6rem] text-steel">Custom example · not for sale</span>
+        </div>
+        <div className="flex flex-col justify-center gap-6 p-[clamp(2rem,6vw,5rem)]">
+          <RuleLabel>Custom studio</RuleLabel>
+          <h2 id="one-of-one" className="display chrome-text text-[clamp(2.75rem,6vw,5.5rem)]">One of One.</h2>
+          <p className="max-w-md text-lg leading-relaxed text-steel">
+            Your face, your crew, your artwork, set on a piece nobody else will ever own. This velvet portrait was made for the face behind the brand. Yours is next.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/customise" className="btn btn-primary">Make yours</Link>
+            <Link href="/customise#artwork" className="btn btn-ghost">Send your artwork</Link>
           </div>
-          <div className="flex flex-col justify-center gap-6 p-[clamp(2rem,6vw,5rem)]">
-            <RuleLabel>Drop {drop.number}</RuleLabel>
-            <h2 className="display chrome-text text-[clamp(2.75rem,6vw,5.5rem)]">{drop.headline}</h2>
-            <p className="max-w-md text-lg leading-relaxed text-steel">{drop.intro}</p>
-            <div className="flex flex-wrap gap-3">
-              <Link href={`/drops/${drop.slug}`} className="btn btn-primary">Shop the drop</Link>
-              <Link href={`/products/${velvet.slug}`} className="btn btn-ghost">The velvet piece</Link>
-            </div>
-          </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* ── Craft ──────────────────────────────────── */}
       <section className="py-[var(--sw-section)]">
         <div className="wrap grid items-center gap-12 lg:grid-cols-2">
           <Reveal className="grid grid-cols-2 gap-3">
-            <Image src="/media/products/seraph-detail-wings-1080.webp" alt="Macro of red and silver crystals on the Seraph tee" width={1080} height={1080} sizes="(max-width:1024px) 45vw, 22vw" className="h-auto w-full" />
-            <Image src="/media/products/velvet-detail-sleeve-1080.webp" alt="Velvet sleeve and ribbed cuff, macro" width={1080} height={1080} sizes="(max-width:1024px) 45vw, 22vw" className="mt-12 h-auto w-full" />
+            <Image src="/media/products/tokyo-speed-demon-detail.webp" alt="Tokyo Speed Demon: close-up of the 07 print on orange cotton" width={310} height={222} sizes="(max-width:1024px) 45vw, 22vw" className="aspect-square h-auto w-full object-cover" />
+            <Image src="/media/products/the-dark-side-detail.webp" alt="The Dark Side: close-up of the printed face" width={310} height={226} sizes="(max-width:1024px) 45vw, 22vw" className="mt-12 aspect-square h-auto w-full object-cover" />
           </Reveal>
           <Reveal>
             <RuleLabel>The craft</RuleLabel>
             <h2 className="display mt-4 text-[clamp(2.25rem,5vw,4rem)]">Looks expensive. Is heavy.</h2>
             <dl className="mt-10 grid grid-cols-2 gap-px bg-gunmetal">
-              {[["Weight", "250 GSM"], ["Fabric", "Cotton, polyester"], ["Finish", "Hand-finished crystal"], ["Sizes", "S · M · L · XL"]].map(([k, v]) => (
+              {[["Weight", "250 GSM"], ["Fabric", "Cotton, polyester"], ["Print", "Back · chest · sleeve"], ["Sizes", "S · M · L · XL"]].map(([k, v]) => (
                 <div key={k} className="bg-void p-4 sm:p-5">
                   <dt className="label text-steel">{k}</dt>
                   <dd className="display mt-2 text-base leading-tight sm:text-xl">{v}</dd>

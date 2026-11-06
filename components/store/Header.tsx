@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { LogoStack, Wordmark } from "@/components/brand/Logo";
 import { BagIcon, CloseIcon, HeartIcon, MenuIcon, SearchIcon, UserIcon } from "@/components/ui/Icons";
 import { useHydrated } from "@/components/ui/useHydrated";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cartCount, useCart } from "@/lib/cart/store";
 import { NAV } from "./nav";
 
@@ -37,7 +38,7 @@ export function Header() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-[background,border-color,backdrop-filter] duration-300 ${
+        className={`sw-dark fixed inset-x-0 top-0 z-50 border-b transition-[background,border-color,backdrop-filter] duration-300 ${
           solid ? "border-gunmetal bg-void" : "border-transparent bg-gradient-to-b from-void from-30% via-void/85 to-transparent"
         }`}
       >
@@ -52,13 +53,13 @@ export function Header() {
               className={`col-start-1 row-start-1 transition-all duration-300 ${compact ? "pointer-events-none -translate-y-2 scale-95 opacity-0" : "opacity-100"}`}
               aria-hidden={compact}
             >
-              <LogoStack priority className="w-[132px] md:w-[158px]" />
+              <LogoStack priority className="w-[112px] min-[380px]:w-[132px] md:w-[158px]" />
             </span>
             <span
               className={`col-start-1 row-start-1 self-center transition-all duration-300 ${compact ? "opacity-100" : "pointer-events-none translate-y-2 opacity-0"}`}
               aria-hidden={!compact}
             >
-              <Wordmark priority className="w-[150px] sm:w-[176px]" />
+              <Wordmark priority className="w-[132px] min-[380px]:w-[150px] sm:w-[176px]" />
             </span>
           </Link>
           <ul className="label hidden items-center gap-7 xl:flex">
@@ -74,7 +75,8 @@ export function Header() {
               </li>
             ))}
           </ul>
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center sm:gap-2">
+            <ThemeToggle />
             <Link href="/search" aria-label="Search" className="grid h-11 w-11 place-items-center hover:text-neon"><SearchIcon className="h-5 w-5" /></Link>
             <Link href="/account" aria-label="Account" className="hidden h-11 w-11 place-items-center hover:text-neon sm:grid"><UserIcon className="h-5 w-5" /></Link>
             <Link href="/wishlist" aria-label="Wishlist" className="hidden h-11 w-11 place-items-center hover:text-neon sm:grid"><HeartIcon className="h-5 w-5" /></Link>
@@ -104,7 +106,7 @@ export function Header() {
         {menu && (
           <motion.div
             id="mobile-menu"
-            className="fixed inset-0 z-40 flex flex-col overflow-y-auto bg-void pt-[var(--sw-header-compact)] xl:hidden"
+            className="sw-dark fixed inset-0 z-40 flex flex-col overflow-y-auto bg-void pt-[var(--sw-header-compact)] xl:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -123,6 +125,7 @@ export function Header() {
               <Link href="/account" className="label">Account</Link>
               <Link href="/wishlist" className="label">Wishlist</Link>
               <Link href="/track" className="label">Track order</Link>
+              <ThemeToggle withLabel className="-my-3 ml-auto" />
             </div>
           </motion.div>
         )}

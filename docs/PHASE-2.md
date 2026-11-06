@@ -70,6 +70,26 @@ S–XL, 15 per size, cotton-polyester, 250 GSM. Lucifer and Heaven Falls are mar
   page. Where tees overlap in the photo, the hidden sleeve isn't there to recover (Doomsday left,
   Lucifer right, Paradise Lost left). Individual front/back photos of each tee will fix both.
 
+## Update: The Origin Collection, One of One, light theme
+
+- **Drop 01 is now The Origin Collection:** The Final Form, The Last Hero, Tokyo Speed Demon, The Dark Side
+  and Main Character Energy (₹499, S–XL, 15/size, cotton-poly 250 GSM). These five are the only pieces on the
+  floating rack. Each product has back, front and sleeve cutouts plus the print close-up and artwork panel
+  from the collection board (`scripts/assets/cutout_origin.py`). The drop page uses the artwork as its hero
+  (no film yet).
+- **The gothic crystal tees** (Seraph, Blood Moon and the 8-tee lineup) stay in the shop but belong to no drop
+  and aren't on the rack. The five-tee gothic image remains the "Next drop" teaser.
+- **One of One** replaces the Rugged Boyz section: it's the custom-studio feature, keeping the velvet film. The
+  velvet portrait tee is a customisation example only (`customExample` in `lib/catalog/data.ts`): no product
+  page, not sellable, not on the rack (enforced by a test). `/customise` is titled One of One and shows it as an
+  example.
+- **Light/dark theme toggle** in the header (and the mobile menu). Light = white + red: tokens remapped in
+  `design/tokens.css`, red deepened to #E3112F for text contrast on white. The choice is saved per browser and
+  applied before first paint. The header, footer, loader, homepage hero, One of One and drop heroes stay dark
+  (`.sw-dark`), because the official logo must sit on black and the film reads on dark.
+- **IP warning:** The Last Hero depicts Batman (cowl and bat emblem). The Final Form and Main Character Energy
+  closely resemble existing anime characters. Get legal advice or redesign before selling.
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |

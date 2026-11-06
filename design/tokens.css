@@ -91,3 +91,43 @@
     --sw-tilt-max: 0deg;
   }
 }
+
+/* Sections that sit on dark film (hero, One of One, drop heroes, brand bars) stay dark in both themes. */
+:root, [data-theme="dark"], [data-theme="light"] .sw-dark {
+  --sw-void: #07070a;
+  --sw-carbon: #131318;
+  --sw-carbon-2: #1a1a21;
+  --sw-gunmetal: #3b3e45;
+  --sw-steel: #888c96;
+  --sw-chrome: #e8e8ec;
+  --sw-blood: #a01529;
+  --sw-neon: #ff1e3c;
+  --sw-neon-glow: rgb(255 30 60 / 0.55);
+  --sw-neon-haze: rgb(255 30 60 / 0.14);
+  --sw-chrome-gradient: linear-gradient(180deg, #ffffff 0%, #e8e8ec 38%, #888c96 62%, #e8e8ec 100%);
+  --sw-on-accent: #07070a;
+}
+[data-theme="light"] .sw-dark { color-scheme: dark; color: var(--sw-chrome); }
+
+/* ── Light theme: white + red ─────────────────────────────────────────
+ * Toggled with <html data-theme="light">. Token NAMES keep their dark-theme meaning as roles:
+ * void = page background, carbon = raised surface, gunmetal = borders, steel = muted text,
+ * chrome = primary text, neon = the red accent.
+ * The neon is deepened slightly (#E3112F) so red text keeps ≥4.5:1 contrast on white.
+ */
+[data-theme="light"] {
+  color-scheme: light;
+  --sw-void: #ffffff;
+  --sw-carbon: #f4f4f6;
+  --sw-carbon-2: #ebebef;
+  --sw-gunmetal: #dcdde2;
+  --sw-steel: #5c606a;
+  --sw-chrome: #0e0e12;
+  --sw-blood: #a01529;
+  --sw-neon: #e3112f;
+  --sw-neon-glow: rgb(227 17 47 / 0.35);
+  --sw-neon-haze: rgb(227 17 47 / 0.09);
+  --sw-chrome-gradient: linear-gradient(180deg, #0e0e12 0%, #2b2c33 45%, #5c606a 64%, #0e0e12 100%);
+  --sw-on-accent: #ffffff;
+}
+

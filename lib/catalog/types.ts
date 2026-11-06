@@ -60,7 +60,10 @@ export type Drop = {
   headline: string;
   intro: string;
   story: string[];
-  video: Video;
+  /** campaign film; null → the hero is built from the stills */
+  video: Video | null;
+  /** text-free artwork used behind the hero when there is no film */
+  heroArt?: Media[];
   stills: Media[];
   products: string[]; // product slugs, in display order
   isLimited: boolean;

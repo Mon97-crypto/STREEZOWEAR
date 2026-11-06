@@ -10,7 +10,7 @@ const COLS = [
 
 export function Footer() {
   return (
-    <footer className="mt-24 border-t border-gunmetal">
+    <footer className="sw-dark mt-24 border-t border-gunmetal bg-void">
       <div className="wrap grid gap-12 py-16 md:grid-cols-[1.2fr_2fr]">
         <div>
           <LogoLockup className="w-[min(280px,70vw)]" />

@@ -16,6 +16,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useCart } from "@/lib/cart/store";
 import type { Media, Product } from "@/lib/catalog/types";
 import { formatINR } from "@/lib/pricing/format";
+import { useTheme } from "@/components/ui/ThemeToggle";
 
 /**
  * The floating store. Garments hang in the void on a slow 3D orbit, overlapping like a rack.
@@ -271,7 +272,13 @@ function OrbitItem({
   const scale = useTransform(depth, (d) => 0.52 + d * 0.56);
   const zIndex = useTransform(depth, (d) => Math.round(d * 100));
   const opacity = useTransform(depth, (d) => 0.28 + d * 0.72);
-  const filter = useTransform(depth, (d) => `blur(${((1 - d) * 3.2).toFixed(2)}px) brightness(${(0.45 + d * 0.55).toFixed(2)})`);
+  // dark: back pieces sink into the night · light: they fade toward white (opacity), never grey
+  const theme = useTheme();
+  const lightMV = useMotionValue(0);
+  useEffect(() => lightMV.set(theme === "light" ? 1 : 0), [theme, lightMV]);
+  const filter = useTransform([depth, lightMV], ([d, l]: number[]) =>
+    `blur(${((1 - d!) * 3.2).toFixed(2)}px) brightness(${l ? 1 : (0.45 + d! * 0.55).toFixed(2)})`,
+  );
   const rotateY = useTransform(rot, (r) => Math.sin(r + baseAngle) * -18);
   const media = mediaOf(item.product);
 

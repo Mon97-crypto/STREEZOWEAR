@@ -6,6 +6,7 @@ import { BoltSlash, RuleLabel } from "@/components/brand/RuleLabel";
 import { CampaignVideo } from "@/components/motion/CampaignVideo";
 import { Reveal } from "@/components/motion/Reveal";
 import { Countdown } from "@/components/store/Countdown";
+import { DropArt } from "@/components/store/DropArt";
 import { Price } from "@/components/store/Price";
 import { ProductCard } from "@/components/store/ProductCard";
 import { drops } from "@/lib/catalog/data";
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: `Drop ${d.number}: ${d.name}`,
     description: d.intro,
     alternates: { canonical: `/drops/${d.slug}` },
-    openGraph: { images: [{ url: d.video.poster, alt: d.name }] },
+    openGraph: { images: [{ url: d.video?.poster ?? d.stills[0]?.src ?? "/brand/logo-primary-900.webp", alt: d.name }] },
   };
 }
 
@@ -36,14 +37,18 @@ export default async function DropPage({ params }: Params) {
 
   return (
     <>
-      <section className="relative isolate grid min-h-[100svh] items-end overflow-hidden">
-        <CampaignVideo video={drop.video} priority className="absolute inset-0 -z-20 h-full w-full object-cover" />
+      <section className="sw-dark relative isolate grid min-h-[100svh] items-end overflow-hidden bg-void">
+        {drop.video ? (
+          <CampaignVideo video={drop.video} priority className="absolute inset-0 -z-20 h-full w-full object-cover" />
+        ) : (
+          <DropArt stills={drop.heroArt ?? drop.stills} priority className="absolute inset-0 -z-20 opacity-70" />
+        )}
         <div aria-hidden className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(7_7_10/.5),transparent_35%,rgb(7_7_10/.95)_92%)]" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-void/45 sm:bg-transparent" />
         <BoltSlash className="top-[62%] -z-10" />
         <div className="wrap w-full pb-[clamp(3rem,8vw,6rem)] pt-[calc(var(--sw-header)+2rem)]">
           <RuleLabel>Drop {drop.number}{drop.isLimited ? " · Limited run" : ""}</RuleLabel>
-          <h1 className="display chrome-text mt-4 text-[clamp(3.5rem,12vw,11rem)]">{drop.name}</h1>
+          <h1 className="display chrome-text mt-4 break-words text-[clamp(2.4rem,10.5vw,10rem)]">{drop.name}</h1>
           <p className="mt-5 max-w-xl text-lg leading-relaxed text-steel">{drop.intro}</p>
           {upcoming ? <div className="mt-8"><Countdown to={drop.launchAt!} /></div> : <Link href="#pieces" className="btn btn-primary mt-8">Shop the drop</Link>}
         </div>
@@ -91,11 +96,17 @@ export default async function DropPage({ params }: Params) {
         })}
       </section>
 
-      {drop.stills.map((m) => (
-        <Reveal key={m.src} className="wrap mt-[var(--sw-section)]">
-          <Image src={m.src} alt={m.alt} width={m.width} height={m.height} sizes="100vw" className="h-auto w-full" />
+      {drop.stills.length > 0 && (
+        <Reveal className="wrap mt-[var(--sw-section)]">
+          <div className="grid gap-px bg-gunmetal sm:grid-cols-2 lg:grid-cols-3">
+            {drop.stills.map((m, i) => (
+              <Link key={m.src} href={`/products/${drop.products[i] ?? ""}`} className="group relative block overflow-hidden bg-void">
+                <Image src={m.src} alt={m.alt} width={m.width} height={m.height} sizes="(max-width:640px) 100vw, 33vw" className="h-auto w-full transition-transform duration-700 group-hover:scale-[1.03]" />
+              </Link>
+            ))}
+          </div>
         </Reveal>
-      ))}
+      )}
     </>
   );
 }

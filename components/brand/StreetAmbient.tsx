@@ -106,7 +106,7 @@ export function StreetAmbient() {
       <div
         className="absolute inset-0 opacity-[0.06]"
         style={{
-          backgroundImage: "linear-gradient(to right, #3B3E45 1px, transparent 1px), linear-gradient(to bottom, #3B3E45 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(to right, var(--sw-gunmetal) 1px, transparent 1px), linear-gradient(to bottom, var(--sw-gunmetal) 1px, transparent 1px)",
           backgroundSize: "88px 88px",
           maskImage: "radial-gradient(ellipse at center, transparent 35%, #000 100%)",
           WebkitMaskImage: "radial-gradient(ellipse at center, transparent 35%, #000 100%)",

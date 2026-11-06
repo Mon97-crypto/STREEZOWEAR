@@ -1,10 +1,11 @@
 /**
  * Launch catalogue (Phase 2 static source).
- * Facts supplied by the owner: prices, sizes S–XL, 15 units per size, cotton/polyester, 250 GSM,
- * Drop 01 "Rugged Boyz". Product names and descriptive copy are written from the artwork and can be
- * renamed. Phase 3 replaces this module with Supabase queries behind lib/catalog/queries.ts.
+ * Facts supplied by the owner: ₹499 tees, sizes S–XL, 15 units per size, cotton/polyester, 250 GSM.
+ * Drop 01 is "The Origin Collection". The gothic crystal tees stay in the shop without a drop.
+ * The velvet portrait piece is a customisation example: never sold, never on the rack.
+ * Product names and descriptive copy are written from the artwork and can be renamed. Phase 3 replaces this module with Supabase queries behind lib/catalog/queries.ts.
  */
-import type { Category, Colour, Drop, Product, Variant } from "./types";
+import type { Category, Colour, Drop, Media, Product, Variant, Video } from "./types";
 import { rupees } from "@/lib/pricing/format";
 
 const SIZES = ["S", "M", "L", "XL"] as const;
@@ -36,7 +37,7 @@ export const products: Product[] = [
       "Washed black, drop shoulders, a boxy fit that hangs right.",
     ],
     categories: ["t-shirts", "oversized-t-shirts", "limited-edition", "new-arrivals"],
-    drop: "rugged-boyz",
+    drop: null,
     pricePaise: rupees(499),
     salePricePaise: null,
     isNew: true,
@@ -70,7 +71,7 @@ export const products: Product[] = [
       "Washed black, drop shoulders, a boxy fit that hangs right.",
     ],
     categories: ["t-shirts", "oversized-t-shirts", "new-arrivals"],
-    drop: "rugged-boyz",
+    drop: null,
     pricePaise: rupees(499),
     salePricePaise: null,
     isNew: true,
@@ -92,39 +93,6 @@ export const products: Product[] = [
       { src: `${P}/blood-moon-detail-cathedral-1080.webp`, alt: "Blood Moon — close-up of the crystal-traced cathedral", width: 1080, height: 1080, kind: "detail" },
     ],
     video: null,
-  },
-  {
-    id: "rugged-boy-velvet",
-    slug: "rugged-boy-velvet-full-sleeve-tee",
-    name: "Rugged Boy Velvet",
-    short: "Crystal portrait on black velvet. Full sleeve.",
-    description: [
-      "The face of the brand, set in red and silver crystals on black velvet. This is the piece the drop is named for.",
-      "Full sleeves, ribbed cuffs, and a velvet hand that looks expensive under any light.",
-    ],
-    categories: ["t-shirts", "limited-edition", "new-arrivals"],
-    drop: "rugged-boyz",
-    pricePaise: rupees(799),
-    salePricePaise: null,
-    isNew: true,
-    isLimited: true,
-    isFeatured: true,
-    isCustomisable: false,
-    fabric: "Cotton, polyester",
-    gsm: 250,
-    fit: null,
-    details: ["Full-hand velvet", "Hand-finished crystal portrait", "Ribbed cuffs"],
-    colours: [{ name: "Black", hex: "#0c0c0e" }],
-    sizes: [...SIZES],
-    variants: variants("RUGGEDVLV", "Black", "BLK"),
-    cutout: null,
-    images: [
-      { src: `${P}/velvet-portrait-longsleeve-1600.webp`, alt: "Rugged Boy velvet full-sleeve tee, front", width: 1600, height: 1600, kind: "image" },
-      { src: `${P}/velvet-detail-portrait-1080.webp`, alt: "Rugged Boy velvet — close-up of the crystal portrait", width: 1080, height: 1080, kind: "detail" },
-      { src: `${P}/velvet-detail-sleeve-1080.webp`, alt: "Rugged Boy velvet — macro of velvet sleeve and cuff", width: 1080, height: 1080, kind: "detail" },
-      { src: `${P}/velvet-detail-profile-1080.webp`, alt: "Rugged Boy velvet — side profile", width: 1080, height: 1080, kind: "detail" },
-    ],
-    video: { desktop: "/media/campaign/velvet-1080.mp4", mobile: "/media/campaign/velvet-720.mp4", mobileWebm: "/media/campaign/velvet-720.webm", poster: "/media/campaign/velvet-poster.jpg" },
   },
 ];
 
@@ -158,7 +126,7 @@ const lineupProducts: Product[] = LINEUP.map((t) => ({
   short: t.short,
   description: [t.line, "Drop shoulders, a boxy fit that hangs right."],
   categories: ["t-shirts", "oversized-t-shirts", "new-arrivals", ...(t.limited ? ["limited-edition"] : [])],
-  drop: "rugged-boyz",
+  drop: null,
   pricePaise: rupees(499),
   salePricePaise: null,
   isNew: true,
@@ -182,36 +150,127 @@ const lineupProducts: Product[] = LINEUP.map((t) => ({
 
 products.push(...lineupProducts);
 
+/**
+ * Customisation example ("One of One"): the owner's crystal portrait on black velvet.
+ * Shown in the One of One section and on /customise only. Not a product, not on the rack.
+ */
+export const customExample: { name: string; video: Video; images: Media[] } = {
+  name: "One of One — velvet portrait",
+  video: { desktop: "/media/campaign/velvet-1080.mp4", mobile: "/media/campaign/velvet-720.mp4", mobileWebm: "/media/campaign/velvet-720.webm", poster: "/media/campaign/velvet-poster.jpg" },
+  images: [
+    { src: `${P}/velvet-portrait-longsleeve-1600.webp`, alt: "Custom example: crystal portrait on a black velvet full-sleeve tee", width: 1600, height: 1600, kind: "image" },
+    { src: `${P}/velvet-detail-portrait-1080.webp`, alt: "Custom example: close-up of the crystal portrait", width: 1080, height: 1080, kind: "detail" },
+    { src: `${P}/velvet-detail-sleeve-1080.webp`, alt: "Custom example: velvet sleeve and cuff", width: 1080, height: 1080, kind: "detail" },
+  ],
+};
+
+/** The brand film used behind the homepage hero (mood, not a product listing). */
+export const brandFilm: Video = { desktop: "/media/campaign/seraph-1080.mp4", mobile: "/media/campaign/seraph-720.mp4", mobileWebm: "/media/campaign/seraph-720.webm", poster: "/media/campaign/seraph-poster.jpg" };
+
+/**
+ * Drop 01 — The Origin Collection. Five oversized tees: logo on the front, full graphic on the back,
+ * hit on the sleeve. Images are cut from the owner's collection boards (~300 px per view for now).
+ */
+type OriginSpec = {
+  id: string; no: string; name: string; tags: string; short: string; line: string;
+  colour: Colour; code: string; cc: string;
+  sizes: Record<"front" | "back" | "side" | "art" | "detail", [number, number]>;
+};
+
+const ORIGIN: OriginSpec[] = [
+  {
+    id: "the-final-form", no: "01", name: "The Final Form", tags: "Anime / Transformation / Power",
+    short: "Lightning-eyed transformation. Oversized tee.",
+    line: "A white-haired fighter mid-transformation, blue lightning tearing through the back with 最終形態 running down the side.",
+    colour: { name: "Black", hex: "#0c0c0e" }, code: "FINALFORM", cc: "BLK",
+    sizes: { front: [292, 282], back: [299, 284], side: [146, 292], art: [479, 214], detail: [310, 214] },
+  },
+  {
+    id: "the-last-hero", no: "02", name: "The Last Hero", tags: "Superhero / Origin / Rebellion",
+    short: "Lone vigilante under a blood moon. Oversized tee.",
+    line: "A lone caped figure against a blood moon over a burning skyline, THE LAST HERO slashed across the back.",
+    colour: { name: "Cream", hex: "#e8e0d0" }, code: "LASTHERO", cc: "CRM",
+    sizes: { front: [301, 283], back: [306, 284], side: [142, 285], art: [479, 233], detail: [310, 233] },
+  },
+  {
+    id: "tokyo-speed-demon", no: "03", name: "Tokyo Speed Demon", tags: "Racing / Tokyo / Street culture",
+    short: "Night racer, car 07. Oversized tee.",
+    line: "A goggled racer and his 07 car tearing through Tokyo, chequered flags and 東京 across the back.",
+    colour: { name: "Orange", hex: "#e8601c" }, code: "SPEEDDEMON", cc: "ORG",
+    sizes: { front: [300, 276], back: [308, 275], side: [143, 277], art: [479, 222], detail: [310, 222] },
+  },
+  {
+    id: "the-dark-side", no: "04", name: "The Dark Side", tags: "Gothic / Supernatural / Fallen",
+    short: "Fallen angel, red halo. Oversized tee.",
+    line: "A fallen angel with torn black wings under a red halo, THE DARK SIDE dripping beneath it.",
+    colour: { name: "White", hex: "#f2f0ec" }, code: "DARKSIDE", cc: "WHT",
+    sizes: { front: [290, 276], back: [311, 278], side: [137, 279], art: [479, 226], detail: [310, 226] },
+  },
+  {
+    id: "main-character-energy", no: "05", name: "Main Character Energy", tags: "Anime pop / Gen Z / Bold",
+    short: "Pink shades, bubblegum, neon stars. Oversized tee.",
+    line: "Pink shades, a bubblegum pop and neon stars, with ヒーロー across the top of the back.",
+    colour: { name: "Cobalt Blue", hex: "#1f3fd1" }, code: "MAINCHAR", cc: "CBLT",
+    sizes: { front: [301, 284], back: [305, 286], side: [140, 287], art: [479, 235], detail: [310, 235] },
+  },
+];
+
+const originProducts: Product[] = ORIGIN.map((t) => {
+  const m = (view: keyof OriginSpec["sizes"], alt: string, kind: Media["kind"]): Media => ({
+    src: `${P}/${t.id}-${view}.webp`, alt, width: t.sizes[view][0], height: t.sizes[view][1], kind,
+  });
+  return {
+    id: t.id,
+    slug: `${t.id}-oversized-tee`,
+    name: t.name,
+    short: t.short,
+    description: [t.line, `${t.tags}. Logo on the chest, full graphic on the back, a hit on the sleeve. Drop shoulders, a boxy fit that hangs right.`],
+    categories: ["t-shirts", "oversized-t-shirts", "new-arrivals"],
+    drop: "origin-collection",
+    pricePaise: rupees(499),
+    salePricePaise: null,
+    isNew: true,
+    isLimited: false,
+    isFeatured: true,
+    isCustomisable: true,
+    fabric: "Cotton, polyester",
+    gsm: 250,
+    fit: "Oversized, drop shoulder",
+    details: ["Back graphic", "Chest logo", "Sleeve print", "Ribbed crew neck"],
+    colours: [t.colour],
+    sizes: [...SIZES],
+    variants: variants(t.code, t.colour.name, t.cc),
+    cutout: m("back", `${t.name} oversized tee, back graphic`, "cutout"),
+    images: [
+      m("back", `${t.name} oversized tee, back`, "cutout"),
+      m("front", `${t.name} oversized tee, front`, "cutout"),
+      m("side", `${t.name} oversized tee, sleeve`, "cutout"),
+      m("detail", `${t.name}: print close-up`, "detail"),
+      m("art", `${t.name}: the artwork. ${t.tags}`, "image"),
+    ],
+    video: null,
+  };
+});
+
+products.push(...originProducts);
+
 export const drops: Drop[] = [
   {
-    slug: "rugged-boyz",
+    slug: "origin-collection",
     number: "01",
-    name: "Rugged Boyz",
+    name: "The Origin Collection",
     status: "live",
     launchAt: null, // PLACEHOLDER — set the official launch date
-    headline: "Rugged Boyz.",
-    intro: "Drop 01. Stone angels, blood moons, serpents, saints and the face behind the brand, set in crystal.",
+    headline: "The Origin Collection.",
+    intro: "Drop 01. Five stories, five tees: the final form, the last hero, a Tokyo speed demon, the dark side and main character energy.",
     story: [
-      "Rugged Boyz is where STREEZØWEAR starts. Eleven pieces, each one built around a single image and hand-finished in crystal.",
-      "Heavyweight 250 GSM in black, washed black, off-white, blood red and velvet. Limited run. When the run is gone, it's gone.",
+      "The Origin Collection is where STREEZØWEAR starts. Five characters, each with their own story, printed big on the back.",
+      "Heavyweight 250 GSM oversized tees in black, cream, orange, white and cobalt. Logo on the chest, a hit on the sleeve. Limited run. When it's gone, it's gone.",
     ],
-    video: { desktop: "/media/campaign/seraph-1080.mp4", mobile: "/media/campaign/seraph-720.mp4", mobileWebm: "/media/campaign/seraph-720.webm", poster: "/media/campaign/seraph-poster.jpg" },
-    stills: [
-      { src: "/media/products/lineup-eight-tees-1556.webp", alt: "The STREEZØWEAR lineup: eight crystal-detailed oversized tees", width: 1556, height: 1038, kind: "image" },
-    ],
-    products: [
-      "seraph-oversized-tee",
-      "villain-era-oversized-tee",
-      "rugged-boy-velvet-full-sleeve-tee",
-      "doomsday-oversized-tee",
-      "lucifer-oversized-tee",
-      "blood-moon-oversized-tee",
-      "heaven-falls-oversized-tee",
-      "born-to-sin-oversized-tee",
-      "paradise-lost-oversized-tee",
-      "the-end-is-near-oversized-tee",
-      "no-saints-left-oversized-tee",
-    ],
+    video: null,
+    heroArt: ORIGIN.map((t) => ({ src: `${P}/${t.id}-detail.webp`, alt: "", width: t.sizes.detail[0], height: t.sizes.detail[1], kind: "detail" as const })),
+    stills: ORIGIN.map((t) => ({ src: `${P}/${t.id}-art.webp`, alt: `${t.no} ${t.name}: ${t.tags}`, width: t.sizes.art[0], height: t.sizes.art[1], kind: "image" as const })),
+    products: ORIGIN.map((t) => `${t.id}-oversized-tee`),
     isLimited: true,
   },
 ];

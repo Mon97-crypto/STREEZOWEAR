@@ -73,7 +73,7 @@ export function FloatingGarment({ media, phase = 0, sizes = "(max-width: 640px) 
     <div
       ref={ref}
       className={`relative grid aspect-[4/5] place-items-center overflow-hidden ${className}`}
-      style={{ background: "radial-gradient(60% 50% at 50% 42%, #15151b 0%, var(--sw-void) 72%)", perspective: 1200 }}
+      style={{ background: "radial-gradient(60% 50% at 50% 42%, var(--sw-carbon-2) 0%, var(--sw-void) 72%)", perspective: 1200 }}
       onPointerEnter={(e) => e.pointerType === "mouse" && setHover(true)}
       onPointerLeave={() => {
         setHover(false);

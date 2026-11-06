@@ -24,7 +24,7 @@ export default function About() {
           <p>We make it for people who wear their attitude. Neon light cutting through a dark street at night. Street style that looks and feels expensive.</p>
           <p className="display text-3xl text-chrome">Welcome to the street. Wear it loud.</p>
         </Reveal>
-        <Reveal><Image src="/media/products/velvet-detail-portrait-1080.webp" alt="Crystal portrait detail from the Rugged Boy velvet piece" width={1080} height={1080} sizes="(max-width:1024px) 100vw, 50vw" className="h-auto w-full" /></Reveal>
+        <Reveal><Image src="/media/products/velvet-detail-portrait-1080.webp" alt="Crystal portrait detail from a One of One custom piece" width={1080} height={1080} sizes="(max-width:1024px) 100vw, 50vw" className="h-auto w-full" /></Reveal>
       </section>
       <section className="wrap mt-[var(--sw-section)]">
         <RuleLabel>The idea behind the logo</RuleLabel>

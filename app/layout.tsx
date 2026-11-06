@@ -6,11 +6,12 @@ import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";
 import "./globals.css";
 import { business, site } from "@/lib/config/business";
+import { themeInitScript } from "@/components/ui/ThemeToggle";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: `${business.name} — Own your street, define your style`, template: `%s · ${business.name}` },
-  description: "Premium oversized streetwear from Bangalore. Limited drops, tees hand-finished in crystal, customisation and 60-minute delivery in select areas.",
+  description: "Premium oversized streetwear from Bangalore. Limited drops, big-print oversized tees, One of One custom pieces, customisation and 60-minute delivery in select areas.",
   applicationName: business.name,
   icons: {
     icon: [
@@ -32,14 +33,16 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#07070A",
-  colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN">
+    <html lang="en-IN" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -11,8 +11,7 @@ describe("launch catalogue", () => {
       expect(p.fabric).toBe("Cotton, polyester");
       for (const v of p.variants) expect(v.stock).toBe(15);
     }
-    expect(products.find((p) => p.id === "rugged-boy-velvet")!.pricePaise).toBe(79900);
-    expect(products.filter((p) => p.id !== "rugged-boy-velvet").every((p) => p.pricePaise === 49900)).toBe(true);
+    expect(products.every((p) => p.pricePaise === 49900)).toBe(true);
   });
 
   it("has unique slugs and SKUs", () => {
@@ -29,7 +28,19 @@ describe("launch catalogue", () => {
       for (const m of [...p.images, ...(p.cutout ? [p.cutout] : [])]) expect(pub(m.src), m.src).toBe(true);
       if (p.video) for (const f of [p.video.desktop, p.video.mobile, p.video.poster]) expect(pub(f), f).toBe(true);
     }
-    for (const d of drops) for (const f of [d.video.desktop, d.video.poster, ...d.stills.map((s) => s.src)]) expect(pub(f), f).toBe(true);
+    for (const d of drops) for (const f of [...(d.video ? [d.video.desktop, d.video.poster] : []), ...d.stills.map((s) => s.src)]) expect(pub(f), f).toBe(true);
+  });
+
+  it("the customisation example is never for sale", () => {
+    expect(products.some((p) => p.id.includes("velvet") || p.slug.includes("velvet"))).toBe(false);
+    for (const d of drops) expect(d.products.some((s) => s.includes("velvet"))).toBe(false);
+  });
+
+  it("Drop 01 is The Origin Collection with five tees", () => {
+    const d = drops.find((x) => x.slug === "origin-collection")!;
+    expect(d.name).toBe("The Origin Collection");
+    expect(d.products).toHaveLength(5);
+    expect(products.filter((p) => p.drop === "origin-collection")).toHaveLength(5);
   });
 
   it("drop products all exist", () => {
