@@ -1,0 +1,5 @@
+# STREEZØWEAR — all rights reserved.
+# No text, images, video, design or code on this site may be used to train,
+# fine-tune or prompt AI/ML models, or to generate derivative designs.
+User-Agent: *
+Disallow: /

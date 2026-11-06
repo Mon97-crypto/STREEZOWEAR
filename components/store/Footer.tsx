@@ -30,7 +30,7 @@ export function Footer() {
         </div>
       </div>
       <div className="wrap flex flex-col justify-between gap-3 border-t border-gunmetal py-6 text-xs text-steel sm:flex-row">
-        <p>© {new Date().getFullYear()} {business.legalName}. {business.city}, {business.state}.</p>
+        <p>© {new Date().getFullYear()} {business.legalName}. All rights reserved. Site design, artwork and code are protected by copyright; copying, scraping or use for AI training is prohibited. {business.city}, {business.state}.</p>
         <p className="label text-[0.65rem]">{business.shortTagline}</p>
       </div>
     </footer>

@@ -30,10 +30,16 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(self)" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
+  // Rights reservation: opt out of AI training/text-and-data mining (EU TDM-Rep, noai conventions)
+  { key: "X-Robots-Tag", value: "noai, noimageai" },
+  { key: "tdm-reservation", value: "1" },
+  { key: "tdm-policy", value: "/terms" },
 ];
 
 const config: NextConfig = {
   poweredByHeader: false,
+  // never ship readable source maps of the site code
+  productionBrowserSourceMaps: false,
   reactStrictMode: true,
   images: {
     formats: ["image/avif", "image/webp"],

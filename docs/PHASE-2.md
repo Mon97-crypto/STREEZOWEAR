@@ -103,6 +103,19 @@ To add the next pieces: run the script on the new sheet, then add an entry to `D
 Later added: Fallen Angel, Ronin and Neon Run (8 pieces). "Fallen Angel", "Ronin" and "Neon Run" are working names.
 The Fallen Angel sheet is shot over a red moon and must be split with `:isnet-general-use` (see the script usage).
 
+## Update: anti-copying / anti-AI measures
+
+- `middleware.ts` + `lib/security/ai-bots.ts`: self-identified AI crawlers (GPTBot, ClaudeBot, CCBot, PerplexityBot,
+  Bytespider, Meta, Amazon, Cohere, Diffbot…) get 403 on every page and image. Search engines and people are unaffected.
+- `robots.txt` always disallows AI crawlers and the Google-Extended / Applebot-Extended opt-out tokens.
+  robots.txt, `/ai.txt` and `/.well-known/tdmrep.json` stay readable so crawlers can see the opt-out.
+- Headers on every response: `X-Robots-Tag: noai, noimageai`, `tdm-reservation: 1` (EU TDM-Rep rights reservation).
+- No production source maps; code is minified (Next.js default, now explicit).
+- Terms: clause forbidding copying the design, scraping, and AI training/derivative use. Footer copyright notice.
+- **Limits:** a public website must send its pages and images to every visitor, so a determined person can still
+  copy or screenshot it, and bots that lie about who they are aren't caught by user-agent checks. For those, enable
+  Vercel's Firewall bot protection and AI-bot rules, and rely on copyright, trademark registration and takedowns.
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |

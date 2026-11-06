@@ -22,7 +22,9 @@ export default function Terms() {
         <h2>Delivery, returns and refunds</h2>
         <p>See the <Link href="/shipping-policy">shipping policy</Link> and the <Link href="/returns">returns policy</Link>.</p>
         <h2>Intellectual property</h2>
-        <p>The STREEZØWEAR name, logo, designs and content on this site belong to {business.legalName}. Don&apos;t reuse them without written permission.</p>
+        <p>The STREEZØWEAR name, logo, garment designs, artwork, photography, video, copy, and the design, layout and code of this website belong to {business.legalName}. All rights reserved. Don&apos;t reuse them without written permission.</p>
+        <h2>No scraping, copying or AI use</h2>
+        <p>You may not copy, reproduce or imitate this website&apos;s design, layout, look and feel, artwork or code; scrape, crawl or bulk-download any part of the site; or use any content from this site, including screenshots, to train, fine-tune or prompt artificial-intelligence or machine-learning systems, or to generate designs derived from it. Text-and-data-mining rights are expressly reserved. Breach may lead to legal action.</p>
         <h2>Governing law</h2>
         <p>These terms are governed by the laws of India. Courts in <Placeholder>Bangalore, Karnataka</Placeholder> have jurisdiction.</p>
       </div>
