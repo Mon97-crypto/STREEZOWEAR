@@ -6,7 +6,9 @@ component of each slice is kept.
 Transparent sheets use their own alpha. Opaque sheets on black are segmented with
 rembg (BiRefNet-lite) on a gamma-lifted copy first.
 
-Usage: python split_sheets.py <out_dir> <sheet>:<slug>:<views comma list> ...
+Usage: python split_sheets.py <out_dir> <sheet>:<slug>:<views comma list>[:<rembg model>] ...
+Giving a model segments the sheet as-is (no gamma lift). Sheet 16 (shot over a red moon) needs
+"isnet-general-use": the default lift makes the haze read as fabric.
 """
 import sys
 import numpy as np
@@ -21,18 +23,23 @@ def disk(r):
     return x * x + y * y <= r * r
 
 for spec in sys.argv[2:]:
-    path, slug, views = spec.split(":")
+    parts = spec.split(":")
+    path, slug, views = parts[:3]
+    model = parts[3] if len(parts) > 3 else None
     views = views.split(",")
     im = Image.open(path).convert("RGBA")
     a = np.asarray(im)[..., 3]
     if (a == 0).mean() < 0.05:
         from rembg import new_session, remove
-        if session is None:
-            session = new_session("birefnet-general-lite")
         rgb = im.convert("RGB")
-        arr = np.asarray(rgb).astype(float) / 255
-        boosted = ImageOps.autocontrast(Image.fromarray((np.power(arr, 0.45) * 255).astype("uint8")), cutoff=1)
-        m = np.asarray(remove(boosted, session=session, only_mask=True)) > 127
+        if model:
+            m = np.asarray(remove(rgb, session=new_session(model), only_mask=True)) > 127
+        else:
+            if session is None:
+                session = new_session("birefnet-general-lite")
+            arr = np.asarray(rgb).astype(float) / 255
+            boosted = ImageOps.autocontrast(Image.fromarray((np.power(arr, 0.45) * 255).astype("uint8")), cutoff=1)
+            m = np.asarray(remove(boosted, session=session, only_mask=True)) > 127
         m = nd.binary_fill_holes(nd.binary_closing(nd.binary_opening(m, structure=disk(2)), structure=disk(4)))
         im = rgb.convert("RGBA")
         im.putalpha(Image.fromarray((m * 255).astype("uint8")).filter(ImageFilter.GaussianBlur(0.7)))
@@ -72,3 +79,4 @@ if os.path.exists(rb):
     px[hem + 6 :, :, 3] = 0
     img = Image.fromarray(px); img = img.crop(img.getbbox()); img.save(rb)
     print("redline back trimmed below hem", hem, img.size)
+

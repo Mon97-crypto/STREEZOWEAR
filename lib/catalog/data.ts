@@ -51,7 +51,7 @@ export const brandFilm: Video = { desktop: "/media/campaign/seraph-1080.mp4", mo
  * Images are split from the owner's product sheets (scripts/assets/split_sheets.py), ~560–770 px per view.
  * Add a piece: drop its views into public/media/products as <id>-<view>.webp and add a spec below.
  */
-type View = "back" | "front" | "side" | "label";
+type View = "back" | "front" | "side" | "label" | "detail-face" | "detail-wing" | "detail-label";
 type DropSpec = {
   id: string; name: string; tags: string; short: string; line: string;
   colour: Colour; code: string; cc: string;
@@ -59,7 +59,10 @@ type DropSpec = {
   views: [View, number, number][];
 };
 
-const VIEW_LABEL: Record<View, string> = { back: "back", front: "front", side: "sleeve", label: "folded, neck label" };
+const VIEW_LABEL: Record<View, string> = {
+  back: "back", front: "front", side: "sleeve", label: "folded, neck label",
+  "detail-face": "close-up of the print", "detail-wing": "close-up of the wing", "detail-label": "close-up of the neck label",
+};
 
 const DROP01: DropSpec[] = [
   {
@@ -97,10 +100,32 @@ const DROP01: DropSpec[] = [
     colour: { name: "Cream", hex: "#e8e0d0" }, code: "LASTHERO", cc: "CRM",
     views: [["back", 563, 608], ["front", 611, 616], ["side", 229, 614], ["label", 491, 492]],
   },
+  {
+    id: "fallen-angel", name: "Fallen Angel", tags: "Myth / Fallen / Gothic",
+    short: "Crowned stone face, falling angel. Oversized tee.",
+    line: "A cracked stone face under a spiked crown on the front; on the back, a winged figure falling through red and black brushwork.",
+    colour: { name: "Red / Black", hex: "#8c0f17" }, code: "FALLEN", cc: "RDBK",
+    views: [["back", 629, 729], ["front", 621, 736], ["detail-face", 497, 393], ["detail-wing", 371, 393], ["detail-label", 350, 393]],
+  },
+  {
+    id: "ronin", name: "Ronin", tags: "Samurai / Blade / Ink",
+    short: "Masked samurai, drawn blade. Oversized tee.",
+    line: "A masked samurai with a drawn blade in black ink across the back, black slashes running across the front and sleeve.",
+    colour: { name: "Red", hex: "#d0141c" }, code: "RONIN", cc: "RED",
+    views: [["back", 570, 607], ["front", 604, 607], ["side", 235, 614], ["label", 501, 490]],
+  },
+  {
+    id: "neon-run", name: "Neon Run", tags: "Racing / City / Night",
+    short: "Street car under a neon skyline. Oversized tee.",
+    line: "A street car on wet tarmac under a neon skyline and an orange moon on the back, blue and white flame slashes across the front and sleeves.",
+    colour: { name: "Orange", hex: "#e0561a" }, code: "NEONRUN", cc: "ORG",
+    views: [["back", 479, 473], ["front", 477, 472], ["side", 222, 522], ["label", 557, 495]],
+  },
 ];
 
 const dropMedia = (t: DropSpec, [v, w, h]: [View, number, number]): Media => ({
-  src: `${P}/${t.id}-${v}.webp`, alt: `${t.name} oversized tee, ${VIEW_LABEL[v]}`, width: w, height: h, kind: "cutout",
+  src: `${P}/${t.id}-${v}.webp`, alt: `${t.name} oversized tee, ${VIEW_LABEL[v]}`, width: w, height: h,
+  kind: v.startsWith("detail") ? "detail" : "cutout",
 });
 
 const drop01Products: Product[] = DROP01.map((t) => ({
@@ -139,7 +164,7 @@ export const drops: Drop[] = [
     status: "live",
     launchAt: null, // PLACEHOLDER — set the official launch date
     headline: "The Origin Collection.",
-    intro: "Drop 01. Redline, Violet Oni, Tokyo Speed Demon, Main Character Energy and The Last Hero. Big stories, printed on the back.",
+    intro: "Drop 01. Racers, demons, ronin, fallen angels and heroes. Eight stories, printed big on the back.",
     story: [
       "The Origin Collection is where STREEZØWEAR starts. Every piece is built around one character and one story, printed big on the back.",
       "Heavyweight 250 GSM oversized tees in red, purple, orange, cobalt and cream. A hit on the chest, a print on the sleeve. Limited run. When it's gone, it's gone.",

@@ -36,11 +36,12 @@ describe("launch catalogue", () => {
     for (const d of drops) expect(d.products.some((s) => s.includes("velvet"))).toBe(false);
   });
 
-  it("Drop 01 is The Origin Collection with five tees", () => {
+  it("Drop 01 is The Origin Collection and lists every one of its products", () => {
     const d = drops.find((x) => x.slug === "origin-collection")!;
     expect(d.name).toBe("The Origin Collection");
-    expect(d.products).toHaveLength(5);
-    expect(products.filter((p) => p.drop === "origin-collection")).toHaveLength(5);
+    const inDrop = products.filter((p) => p.drop === "origin-collection").map((p) => p.slug);
+    expect(inDrop.length).toBeGreaterThan(0);
+    expect([...d.products].sort()).toEqual([...inDrop].sort());
   });
 
   it("drop products all exist", () => {

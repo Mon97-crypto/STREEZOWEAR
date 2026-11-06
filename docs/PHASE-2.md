@@ -100,6 +100,9 @@ segmented first). Views are ~560–770 px. Earlier Origin images (Final Form, Da
 To add the next pieces: run the script on the new sheet, then add an entry to `DROP01` in `lib/catalog/data.ts`.
 "Violet Oni" is a working name.
 
+Later added: Fallen Angel, Ronin and Neon Run (8 pieces). "Fallen Angel", "Ronin" and "Neon Run" are working names.
+The Fallen Angel sheet is shot over a red moon and must be split with `:isnet-general-use` (see the script usage).
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |
