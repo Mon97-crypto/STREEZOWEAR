@@ -112,3 +112,18 @@
 @media (prefers-reduced-motion: reduce) {
   .sw-caret, .sw-blink, .sw-flicker, .sw-breathe, .sw-streak, .sw-scan, .sw-light { animation: none; }
 }
+
+/* Hero headline: modern, white, thin neon-red outline with a soft glow */
+.sw-hero-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.08;
+  color: #ffffff;
+  -webkit-text-stroke: 1px #ff1e3c;
+  paint-order: stroke fill;
+  text-shadow: 0 0 6px rgb(255 30 60 / 0.55), 0 0 22px rgb(255 30 60 / 0.35), 0 2px 18px rgb(0 0 0 / 0.6);
+}
+.sw-hero-caret { color: #ff1e3c; -webkit-text-stroke: 0; font-weight: 300; margin-left: 0.04em; }

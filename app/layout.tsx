@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@fontsource/archivo/800-italic.css";
 import "@fontsource/archivo/900-italic.css";
+import "@fontsource/archivo/600.css";
 import "@fontsource/jetbrains-mono/500-italic.css";
 import "@fontsource/inter/400.css";
 import "@fontsource/inter/600.css";

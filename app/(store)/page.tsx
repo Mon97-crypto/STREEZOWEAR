@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BoltSlash, RuleLabel } from "@/components/brand/RuleLabel";
 import { CampaignVideo } from "@/components/motion/CampaignVideo";
 import { Reveal } from "@/components/motion/Reveal";
+import { TypedHeadline } from "@/components/motion/TypedHeadline";
 import { ExpressCheck } from "@/components/store/ExpressCheck";
 import { FloatingStore } from "@/components/motion/FloatingStore";
 import { brandFilm, customExample } from "@/lib/catalog/data";
@@ -31,9 +32,7 @@ export default async function Home() {
         <BoltSlash className="top-[58%] -z-10" />
         <div className="wrap w-full pb-[clamp(3rem,8vw,6rem)] pt-[calc(var(--sw-header)+2rem)]">
           <RuleLabel>Drop {drop.number} · {drop.name}</RuleLabel>
-          <h1 className="display chrome-text mt-5 text-[clamp(2.9rem,9vw,8.5rem)]">
-            Own your street,<br />define your style.
-          </h1>
+          <TypedHeadline lines={["Own your street,", "define your style."]} className="sw-hero-title mt-5 text-[clamp(1.9rem,5.2vw,4.6rem)]" />
           <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed text-steel">
             Premium oversized tees with big stories on the back, released in limited drops. Made in Bangalore for people who wear their attitude.
           </p>

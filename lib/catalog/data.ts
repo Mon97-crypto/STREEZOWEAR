@@ -44,7 +44,7 @@ export const customExample: { name: string; video: Video; images: Media[] } = {
 };
 
 /** The brand film used behind the homepage hero (mood, not a product listing). */
-export const brandFilm: Video = { desktop: "/media/campaign/seraph-1080.mp4", mobile: "/media/campaign/seraph-720.mp4", mobileWebm: "/media/campaign/seraph-720.webm", poster: "/media/campaign/seraph-poster.jpg" };
+export const brandFilm: Video = { desktop: "/media/campaign/fallen-angel-1080.mp4", mobile: "/media/campaign/fallen-angel-720.mp4", mobileWebm: "/media/campaign/fallen-angel-720.webm", poster: "/media/campaign/fallen-angel-poster.jpg" };
 
 /**
  * Drop 01 — The Origin Collection. Oversized tees with a chest hit, a full back graphic and a sleeve print.
