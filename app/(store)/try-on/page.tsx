@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHead } from "@/components/store/PageHead";
 import { TryOn } from "@/components/store/TryOn";
 import { TRY_ON } from "@/lib/tryon/config";
+import { aiTryOnEnabled } from "@/lib/tryon/ai";
 
 export const metadata: Metadata = {
   title: "Try it on",
@@ -13,8 +14,8 @@ export default function TryOnPage() {
   const piece = TRY_ON[0]!;
   return (
     <>
-      <PageHead kicker="Try it on" title="See it on you." intro="Add a photo of yourself and we'll fit the tee to your shoulders. Your photo stays on your device." />
-      <div className="wrap"><TryOn piece={piece} /></div>
+      <PageHead kicker="Try it on" title="See it on you." intro="Add a photo of yourself and we'll fit the tee to your shoulders instantly, on your device. Want it realistic? Our AI can redraw you wearing it." />
+      <div className="wrap"><TryOn piece={piece} aiEnabled={aiTryOnEnabled()} /></div>
     </>
   );
 }

@@ -17,7 +17,7 @@ export default function Privacy() {
           <li>Order details: name, email, mobile number and delivery address, to fulfil and deliver your order.</li>
           <li>Account details, if you create an account: email, saved addresses, order history and wishlist.</li>
           <li>Payment status from our payment provider. We never see or store card numbers, CVVs or UPI PINs.</li>
-          <li>Try-on photos: none. The photo you add on the Try it on page is processed inside your browser and is never sent to us or anyone else, and it isn&apos;t saved.</li>
+          <li>Try-on photos. The instant preview runs inside your browser and sends nothing. If you choose &ldquo;Make it realistic&rdquo; and tick the consent box, that one photo is sent over an encrypted connection to our AI provider (<Placeholder>Replicate, Inc.</Placeholder>) to create the image. We don&apos;t save it, log it or use it for anything else, and the provider deletes it and the result automatically within about an hour. We never use try-on photos for training or marketing.</li>
           <li>Artwork you upload for custom pieces, used only to quote and produce your order.</li>
           <li>Basic technical data (device, browser, pages visited) to keep the site secure and working.</li>
         </ul>

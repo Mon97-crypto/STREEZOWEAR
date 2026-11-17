@@ -127,8 +127,14 @@ size/length/tilt sliders, reset, save picture and remove photo.
   elsewhere. Verified in the browser: after adding a photo the only requests are GETs for the detection files.
 - Fit maths is in `lib/tryon/fit.ts` (unit-tested). Pieces are listed in `lib/tryon/config.ts`; add a piece once it has
   a clean cutout. CSP gained `'wasm-unsafe-eval'` so the model can run (this does not allow JS eval).
-- **What it is not:** it places the flat tee image on the photo. It doesn't wrap around the body, go behind crossed
-  arms, or simulate drape. A photoreal AI try-on would need photos sent to an AI service.
+- **What it is not:** the instant preview places the flat tee image on the photo; it doesn't wrap or drape.
+- **Realistic (AI) step**, added later at the owner's request: `POST /api/try-on` (`app/api/try-on/route.ts`) sends the
+  photo (≤1024 px JPEG, made in the browser) plus the garment chosen server-side by slug to Replicate via
+  `lib/tryon/ai/`, and returns the result inline as a data URI (the browser never contacts the provider).
+  Guards: off unless configured, explicit consent (own photo / permission, 18+), same-origin check, real file-type
+  sniffing, 3 MB cap, per-IP and daily limits, 55 s timeout with job cancel. Never stores or logs the photo.
+  Replicate deletes inputs/outputs ~1 h after each job. Setup: `docs/DEPLOYMENT.md`. Untested against the live
+  service: this sandbox can't reach Replicate and there's no token yet.
 
 ## Honest limits (by design until later phases)
 
