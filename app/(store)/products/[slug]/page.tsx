@@ -11,6 +11,7 @@ import { ProductPurchase } from "@/components/store/ProductPurchase";
 import { products } from "@/lib/catalog/data";
 import { effectivePrice, getDrop, getProduct, getRelated, totalStock } from "@/lib/catalog/queries";
 import { business, policies, site } from "@/lib/config/business";
+import { hasTryOn } from "@/lib/tryon/config";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -83,6 +84,16 @@ export default async function ProductPage({ params }: Params) {
             <ExpressCheck />
             <p className="text-xs text-steel">{policies.standardDeliveryEstimate}.</p>
           </div>
+
+          {hasTryOn(product.slug) && (
+            <Link href="/try-on" className="mt-4 flex items-center justify-between border border-neon p-5 transition-shadow hover:shadow-[0_0_24px_var(--sw-neon-glow)]">
+              <span>
+                <span className="label block text-neon">Try it on</span>
+                <span className="mt-1 block text-sm text-steel">See this tee on your own photo. Your photo stays on your device.</span>
+              </span>
+              <span aria-hidden className="text-neon">→</span>
+            </Link>
+          )}
 
           {product.isCustomisable && (
             <Link href={`/customise?product=${product.slug}`} className="mt-4 flex items-center justify-between border border-gunmetal p-5 transition-colors hover:border-neon">

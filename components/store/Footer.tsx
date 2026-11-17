@@ -3,7 +3,7 @@ import { LogoLockup } from "@/components/brand/Logo";
 import { business } from "@/lib/config/business";
 
 const COLS = [
-  { title: "Shop", links: [["All products", "/shop"], ["New drops", "/drops"], ["T-Shirts", "/shop/t-shirts"], ["Limited edition", "/shop/limited-edition"], ["Customise", "/customise"]] },
+  { title: "Shop", links: [["All products", "/shop"], ["New drops", "/drops"], ["T-Shirts", "/shop/t-shirts"], ["Limited edition", "/shop/limited-edition"], ["Customise", "/customise"], ["Try it on", "/try-on"]] },
   { title: "Help", links: [["Track order", "/track"], ["Shipping", "/shipping-policy"], ["Returns & refunds", "/returns"], ["Size guide", "/size-guide"], ["FAQs", "/faq"], ["Contact", "/contact"]] },
   { title: "Brand", links: [["About", "/about"], ["Privacy", "/privacy"], ["Terms", "/terms"]] },
 ] as const;

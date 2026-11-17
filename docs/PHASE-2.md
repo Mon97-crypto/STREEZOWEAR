@@ -116,6 +116,20 @@ The Fallen Angel sheet is shot over a red moon and must be split with `:isnet-ge
   copy or screenshot it, and bots that lie about who they are aren't caught by user-agent checks. For those, enable
   Vercel's Firewall bot protection and AI-bot rules, and rely on copyright, trademark registration and takedowns.
 
+## Update: Try it on (`/try-on`)
+
+Visitors add a photo and the Fallen Angel tee is fitted to their shoulders (front or back), with drag and
+size/length/tilt sliders, reset, save picture and remove photo.
+
+- **Privacy by construction:** the photo is read with the browser's file API, resized on a canvas and analysed by a
+  body-detection model (MediaPipe Pose, lite) that is **self-hosted** under `public/vendor/mediapipe/`. Nothing is
+  uploaded and nothing is written to storage. The CSP (`connect-src 'self'`) would also block any attempt to send it
+  elsewhere. Verified in the browser: after adding a photo the only requests are GETs for the detection files.
+- Fit maths is in `lib/tryon/fit.ts` (unit-tested). Pieces are listed in `lib/tryon/config.ts`; add a piece once it has
+  a clean cutout. CSP gained `'wasm-unsafe-eval'` so the model can run (this does not allow JS eval).
+- **What it is not:** it places the flat tee image on the photo. It doesn't wrap around the body, go behind crossed
+  arms, or simulate drape. A photoreal AI try-on would need photos sent to an AI service.
+
 ## Honest limits (by design until later phases)
 
 | Not live yet | Why | Phase |

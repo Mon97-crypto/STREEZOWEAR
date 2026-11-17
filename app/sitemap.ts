@@ -4,7 +4,7 @@ import { site } from "@/lib/config/business";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const u = (p: string) => `${site.url}${p}`;
-  const pages = ["", "/shop", "/drops", "/customise", "/about", "/contact", "/faq", "/size-guide", "/shipping-policy", "/returns", "/privacy", "/terms", "/track"];
+  const pages = ["", "/shop", "/drops", "/customise", "/try-on", "/about", "/contact", "/faq", "/size-guide", "/shipping-policy", "/returns", "/privacy", "/terms", "/track"];
   return [
     ...pages.map((p) => ({ url: u(p || "/"), changeFrequency: "weekly" as const, priority: p === "" ? 1 : 0.6 })),
     ...categories.map((c) => ({ url: u(`/shop/${c.slug}`), changeFrequency: "weekly" as const, priority: 0.7 })),
