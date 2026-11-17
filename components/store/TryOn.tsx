@@ -115,8 +115,21 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
     fd.append("consent", "yes");
     try {
       const res = await fetch("/api/try-on", { method: "POST", body: fd, cache: "no-store" });
-      const j = (await res.json().catch(() => ({}))) as { image?: string; error?: string };
-      if (!res.ok || !j.image) return setAi({ state: "error", msg: j.error ?? "Realistic try-on is unavailable right now." });
+      let j = (await res.json().catch(() => ({}))) as { status?: string; id?: string; image?: string; error?: string };
+      if (!res.ok && res.status !== 202) return setAi({ state: "error", msg: j.error ?? "Realistic try-on is unavailable right now." });
+      // the job may still be running: check back every 2 s for up to 2 minutes
+      const id = j.id;
+      const until = Date.now() + 120_000;
+      while (!j.image && id && Date.now() < until) {
+        await new Promise((r) => setTimeout(r, 2000));
+        const r = await fetch(`/api/try-on?id=${encodeURIComponent(id)}`, { cache: "no-store" });
+        j = (await r.json().catch(() => ({}))) as typeof j;
+        if (!r.ok && r.status !== 202) return setAi({ state: "error", msg: j.error ?? "Realistic try-on is unavailable right now." });
+      }
+      if (!j.image) {
+        if (id) fetch(`/api/try-on?id=${encodeURIComponent(id)}`, { method: "DELETE" }).catch(() => {});
+        return setAi({ state: "error", msg: "That took too long. Please try again." });
+      }
       setAi({ state: "done", image: j.image });
     } catch {
       setAi({ state: "error", msg: "Couldn't reach the server. Check your connection." });

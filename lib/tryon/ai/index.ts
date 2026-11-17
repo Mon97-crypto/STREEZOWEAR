@@ -12,7 +12,7 @@ export function getProvider(env: Record<string, string | undefined> = process.en
 }
 
 export function aiTryOnEnabled(env: Record<string, string | undefined> = process.env): boolean {
-  return env.TRYON_AI_ENABLED === "true" && !!env.REPLICATE_API_TOKEN && !!env.REPLICATE_TRYON_MODEL;
+  return env.TRYON_AI_ENABLED === "true" && !!env.REPLICATE_API_TOKEN;
 }
 
 /** Garments the AI may use. Chosen server-side by slug, so a visitor can't send their own garment. */

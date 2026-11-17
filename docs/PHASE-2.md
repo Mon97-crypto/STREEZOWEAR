@@ -140,8 +140,8 @@ size/length/tilt sliders, reset, save picture and remove photo.
   `lib/tryon/ai/`, and returns the result inline as a data URI (the browser never contacts the provider).
   Guards: off unless configured, explicit consent (own photo / permission, 18+), same-origin check, real file-type
   sniffing, 3 MB cap, per-IP and daily limits, 55 s timeout with job cancel. Never stores or logs the photo.
-  Replicate deletes inputs/outputs ~1 h after each job. Setup: `docs/DEPLOYMENT.md`. Untested against the live
-  service: this sandbox can't reach Replicate and there's no token yet.
+  Replicate deletes inputs/outputs ~1 h after each job. Setup: `docs/DEPLOYMENT.md`. Tested live on Replicate: ~6 s per try-on end to end
+  through the site (start → check → image), default model `prunaai/p-image-try-on`.
 
 ## Honest limits (by design until later phases)
 

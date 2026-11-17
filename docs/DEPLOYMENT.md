@@ -38,14 +38,17 @@ The instant try-on works with no setup. The "Make it realistic" step stays hidde
 |---|---|
 | `TRYON_AI_ENABLED` | `true` |
 | `REPLICATE_API_TOKEN` | from replicate.com → Account → API tokens (server-only; never `NEXT_PUBLIC_`) |
-| `REPLICATE_TRYON_MODEL` | the try-on model, `owner/name` or `owner/name:version` |
-| `REPLICATE_TRYON_INPUTS` | only if the model's input names differ from the default `{"person":"human_img","garment":"garm_img","description":"garment_des","extra":{"category":"upper_body"}}` |
+| `REPLICATE_TRYON_MODEL` | optional. Default `prunaai/p-image-try-on`, the best of four official models we compared (face, pose and background kept; ~3–5 s per run) |
+| `REPLICATE_TRYON_INPUTS` | only if you switch to a model with different input names (a name ending `[]` is sent as a list) |
 | `TRYON_PER_IP_PER_HOUR` / `TRYON_DAILY_LIMIT` | optional caps (default 5 per visitor per hour, 200 per day per server instance) |
 
-**Choose a model licensed for commercial use.** Many popular open try-on models (e.g. IDM-VTON) are licensed for
+**Model choice.** Compared on the same photo and tee: `prunaai/p-image-try-on` (best), `google/nano-banana`
+(good, kept the undershirt, changed framing), `bytedance/seedream-4` and `flux-kontext-apps/multi-image-kontext-pro`
+(both changed the face). If you switch, choose a model licensed for commercial use. Many popular open try-on models (e.g. IDM-VTON) are licensed for
 non-commercial use only. Check the model page's licence before going live, and set a spending limit in Replicate's
 billing settings.
 
 **Data:** the photo is held only in memory for the request and never logged or stored. Replicate deletes API
 inputs, outputs and logs about an hour after each job (replicate.com/docs/topics/predictions/data-retention).
-Each try-on is billed by Replicate per run.
+Each try-on is billed by Replicate per run. The site starts the job and checks back every 2 s (up to 2 min), so a slow
+queue never hits Vercel's function time limit; abandoned jobs are cancelled.

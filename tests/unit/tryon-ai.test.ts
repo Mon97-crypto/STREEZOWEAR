@@ -36,11 +36,19 @@ describe("rate limit", () => {
 });
 
 describe("Replicate adapter", () => {
-  it("is off without a token and model", () => {
+  it("is off without a token", () => {
     expect(() => replicateProvider({})).toThrow(TryOnError);
   });
+  it("defaults to the p-image-try-on model and its input names", () => {
+    const a = buildRequest("prunaai/p-image-try-on", input, parseMapping(undefined));
+    expect(a.url).toBe("https://api.replicate.com/v1/models/prunaai/p-image-try-on/predictions");
+    const body = (a.json as { input: Record<string, unknown> }).input;
+    expect(body.person_image).toMatch(/^data:image\/jpeg;base64,/);
+    expect(Array.isArray(body.garment_images)).toBe(true);
+    expect((body.garment_images as string[])[0]).toMatch(/^data:image\/jpeg;base64,/);
+  });
   it("maps inputs onto the model's names and picks the right endpoint", () => {
-    const m = parseMapping(undefined);
+    const m = parseMapping('{"person":"human_img","garment":"garm_img","description":"garment_des","extra":{"category":"upper_body"}}');
     const a = buildRequest("owner/model", input, m);
     expect(a.url).toBe("https://api.replicate.com/v1/models/owner/model/predictions");
     const body = (a.json as { input: Record<string, string> }).input;
@@ -51,23 +59,35 @@ describe("Replicate adapter", () => {
     expect((b.json as { version: string }).version).toBe("abc123");
     expect(() => parseMapping('{"person":"a"}')).toThrow();
   });
-  it("polls until done, then fetches the result image", async () => {
+  it("starts a job, then checks it until the image is ready", async () => {
     const calls: string[] = [];
+    let n = 0;
     const fake = vi.fn(async (url: string | URL | Request, init?: RequestInit) => {
       const u = String(url); calls.push(`${init?.method ?? "GET"} ${u}`);
-      if (u.endsWith("/predictions")) return Response.json({ id: "p1", status: "processing", urls: { get: "https://api.replicate.com/v1/predictions/p1", cancel: "https://api.replicate.com/v1/predictions/p1/cancel" } }, { status: 201 });
-      if (u.endsWith("/p1")) return Response.json({ id: "p1", status: "succeeded", output: ["https://replicate.delivery/out.png"] });
-      return new Response(new Uint8Array([1, 2, 3]), { headers: { "content-type": "image/png" } });
+      if (u.endsWith("/models/prunaai/p-image-try-on/predictions")) return Response.json({ id: "abcdefghijklmnop1234", model: "prunaai/p-image-try-on", status: "starting" }, { status: 201 });
+      if (u.endsWith("/predictions/abcdefghijklmnop1234")) return Response.json({ id: "abcdefghijklmnop1234", model: "prunaai/p-image-try-on", status: ++n < 2 ? "processing" : "succeeded", output: "https://replicate.delivery/out.jpg" });
+      return new Response(new Uint8Array([1, 2, 3]), { headers: { "content-type": "image/jpeg" } });
     });
-    const p = replicateProvider({ REPLICATE_API_TOKEN: "t", REPLICATE_TRYON_MODEL: "o/m:v" }, fake as unknown as typeof fetch);
-    const r = await p.run(input, new AbortController().signal);
-    expect(r.mime).toBe("image/png");
-    expect(r.bytes).toEqual(new Uint8Array([1, 2, 3]));
-    expect(calls).toEqual(["POST https://api.replicate.com/v1/predictions", "GET https://api.replicate.com/v1/predictions/p1", "GET https://replicate.delivery/out.png"]);
+    const p = replicateProvider({ REPLICATE_API_TOKEN: "t" }, fake as unknown as typeof fetch);
+    const sig = new AbortController().signal;
+    const s1 = await p.start(input, sig);
+    expect(s1).toEqual({ status: "running", id: "abcdefghijklmnop1234" });
+    expect((await p.check("abcdefghijklmnop1234", sig)).status).toBe("running");
+    const s3 = await p.check("abcdefghijklmnop1234", sig);
+    expect(s3.status).toBe("done");
+    if (s3.status === "done") expect(s3.result.bytes).toEqual(new Uint8Array([1, 2, 3]));
+    expect(calls.at(-1)).toBe("GET https://replicate.delivery/out.jpg");
+  });
+  it("won't check malformed ids or other models' jobs", async () => {
+    const fake = vi.fn(async () => Response.json({ id: "abcdefghijklmnop1234", model: "someone/else", status: "succeeded", output: "https://x/y.jpg" }));
+    const p = replicateProvider({ REPLICATE_API_TOKEN: "t" }, fake as unknown as typeof fetch);
+    const sig = new AbortController().signal;
+    await expect(p.check("../../account", sig)).rejects.toMatchObject({ code: "not_found" });
+    await expect(p.check("abcdefghijklmnop1234", sig)).rejects.toMatchObject({ code: "not_found" });
   });
   it("reports a failed job as rejected", async () => {
-    const fake = vi.fn(async () => Response.json({ id: "p", status: "failed", error: "nsfw" }, { status: 201 }));
+    const fake = vi.fn(async () => Response.json({ id: "abcdefghijklmnop1234", status: "failed", error: "nsfw" }, { status: 201 }));
     const p = replicateProvider({ REPLICATE_API_TOKEN: "t", REPLICATE_TRYON_MODEL: "o/m" }, fake as unknown as typeof fetch);
-    await expect(p.run(input, new AbortController().signal)).rejects.toMatchObject({ code: "rejected" });
+    await expect(p.start(input, new AbortController().signal)).rejects.toMatchObject({ code: "rejected" });
   });
 });
