@@ -28,8 +28,8 @@ function reply(state: JobState) {
 
 function failure(e: unknown) {
   const code = e instanceof TryOnError ? e.code : "provider_error";
-  // log the kind of failure only, never the image or the provider's echo of it
-  console.error("[try-on] failed:", code);
+  // log the kind of failure and our own short message (e.g. "Replicate 429"), never the image or the provider's echo of it
+  console.error("[try-on] failed:", code, e instanceof TryOnError ? e.message : (e as Error)?.name ?? "error");
   if (code === "timeout") return fail(504, "That took too long. Please try again.");
   if (code === "rejected") return fail(422, "We couldn't use that photo. Try a clear, front-facing photo of one person.");
   if (code === "not_found") return fail(404, "That try-on has expired. Please start again.");

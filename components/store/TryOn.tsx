@@ -21,7 +21,7 @@ function stagedBody(w: number, h: number): Body {
   return { shoulderL: { x: cx - sw / 2, y }, shoulderR: { x: cx + sw / 2, y }, hipL: null, hipR: null, elbowL: null, elbowR: null, turn: 1 };
 }
 
-export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabled?: boolean }) {
+export function TryOn({ piece }: { piece: TryOnPiece }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const photoRef = useRef<HTMLCanvasElement | null>(null); // the resized photo, kept in memory only
   const analysisRef = useRef<Analysis | null>(null);
@@ -37,8 +37,6 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
   const view = piece.views.find((v) => v.id === viewId)!;
   const drag = useRef<{ x: number; y: number } | null>(null);
   const frame = useRef(0);
-  const [consent, setConsent] = useState(false);
-  const [ai, setAi] = useState<{ state: "idle" | "working" | "done" | "error"; image?: string; msg?: string }>({ state: "idle" });
 
   // load the tee images once
   useEffect(() => {
@@ -97,53 +95,7 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
     }
   }
 
-  async function makeRealistic() {
-    const photo = photoRef.current;
-    if (!photo || !consent) return;
-    setAi({ state: "working" });
-    // send a fresh ≤1024 px JPEG of the original photo (no overlay); nothing is kept here either
-    const k = Math.min(1, 1024 / Math.max(photo.width, photo.height));
-    const c = document.createElement("canvas");
-    c.width = Math.round(photo.width * k); c.height = Math.round(photo.height * k);
-    c.getContext("2d")!.drawImage(photo, 0, 0, c.width, c.height);
-    const blob = await new Promise<Blob | null>((r) => c.toBlob(r, "image/jpeg", 0.88));
-    c.width = c.height = 0;
-    if (!blob) return setAi({ state: "error", msg: "Couldn't prepare the photo." });
-    const fd = new FormData();
-    fd.append("photo", blob, "photo.jpg");
-    fd.append("slug", piece.slug);
-    fd.append("consent", "yes");
-    try {
-      const res = await fetch("/api/try-on", { method: "POST", body: fd, cache: "no-store" });
-      let j = (await res.json().catch(() => ({}))) as { status?: string; id?: string; image?: string; error?: string };
-      if (!res.ok && res.status !== 202) return setAi({ state: "error", msg: j.error ?? "Realistic try-on is unavailable right now." });
-      // the job may still be running: check back every 2 s for up to 2 minutes
-      const id = j.id;
-      const until = Date.now() + 120_000;
-      while (!j.image && id && Date.now() < until) {
-        await new Promise((r) => setTimeout(r, 2000));
-        const r = await fetch(`/api/try-on?id=${encodeURIComponent(id)}`, { cache: "no-store" });
-        j = (await r.json().catch(() => ({}))) as typeof j;
-        if (!r.ok && r.status !== 202) return setAi({ state: "error", msg: j.error ?? "Realistic try-on is unavailable right now." });
-      }
-      if (!j.image) {
-        if (id) fetch(`/api/try-on?id=${encodeURIComponent(id)}`, { method: "DELETE" }).catch(() => {});
-        return setAi({ state: "error", msg: "That took too long. Please try again." });
-      }
-      setAi({ state: "done", image: j.image });
-    } catch {
-      setAi({ state: "error", msg: "Couldn't reach the server. Check your connection." });
-    }
-  }
-
-  function saveAi() {
-    if (!ai.image) return;
-    const a = document.createElement("a");
-    a.href = ai.image; a.download = `streezowear-${piece.slug}-realistic.jpg`; a.click();
-  }
-
   function clear() {
-    setAi({ state: "idle" }); setConsent(false);
     photoRef.current = null; analysisRef.current = null;
     const c = canvasRef.current;
     if (c) { c.getContext("2d")!.clearRect(0, 0, c.width, c.height); c.width = c.height = 0; }
@@ -208,18 +160,8 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
         <p className="mt-3 text-sm text-neon" role="alert">{error}</p>
         <p className="mt-1 flex items-start gap-2 text-xs leading-relaxed text-steel">
           <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 shrink-0 text-neon" fill="none" stroke="currentColor" strokeWidth={1.5} aria-hidden><rect x="5" y="11" width="14" height="9" /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
-          {aiEnabled
-            ? "The instant preview runs on your device and nothing is uploaded. The realistic version sends your photo to our AI provider only when you ask for it; we don't keep it, and the provider deletes it automatically within an hour."
-            : "Your photo never leaves your device. It isn't uploaded, saved or shared: the fitting runs inside your browser, and the photo is gone when you close or leave this page."}
+          Your photo never leaves your device. It isn&apos;t uploaded, saved or shared: the fitting runs inside your browser, and the photo is gone when you close or leave this page.
         </p>
-        {ai.state === "done" && ai.image && (
-          <figure className="mt-8">
-            <figcaption className="label mb-3 text-neon">Realistic try-on</figcaption>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={ai.image} alt={`AI-generated image of you wearing the ${piece.name} tee`} className="w-full border border-gunmetal" />
-            <p className="mt-2 text-xs text-steel">AI-generated preview. Colours and fit are approximate.</p>
-          </figure>
-        )}
       </div>
 
       <div className="space-y-7">
@@ -251,22 +193,6 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
             <button type="button" className="btn btn-ghost" onClick={clear}>Remove photo</button>
           </div>
         </fieldset>
-
-        {aiEnabled && (
-          <div className="border border-neon/60 bg-carbon p-5" aria-live="polite">
-            <p className="label text-neon">Make it realistic</p>
-            <p className="mt-2 text-sm leading-relaxed text-steel">AI redraws your photo with you wearing the {piece.name}, front view. Takes up to a minute.</p>
-            <label className="mt-4 flex gap-3 text-sm leading-relaxed text-steel">
-              <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} disabled={status !== "ready"} className="mt-1 h-5 w-5 shrink-0 accent-[var(--sw-neon)]" />
-              <span>This is a photo of me (or I have permission), I&apos;m 18 or older, and I agree to it being sent to STREEZØWEAR&apos;s AI provider to make this image. It is not stored and is deleted automatically within an hour. <Link href="/privacy" className="text-neon">Privacy</Link></span>
-            </label>
-            <button type="button" className="btn btn-primary mt-4 w-full" disabled={status !== "ready" || !consent || ai.state === "working"} onClick={makeRealistic}>
-              {ai.state === "working" ? "Creating… up to a minute" : ai.state === "done" ? "Create again" : "Make it realistic"}
-            </button>
-            {ai.state === "error" && <p className="mt-3 text-sm text-neon" role="alert">{ai.msg}</p>}
-            {ai.state === "done" && <button type="button" className="btn btn-ghost mt-3 w-full" onClick={saveAi}>Save realistic picture</button>}
-          </div>
-        )}
 
         <div className="border-t border-gunmetal pt-6">
           <Link href={`/products/${piece.slug}`} className="btn btn-primary w-full">Like it? Get the {piece.name}</Link>

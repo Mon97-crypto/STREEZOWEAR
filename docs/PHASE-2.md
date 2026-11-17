@@ -142,6 +142,9 @@ size/length/tilt sliders, reset, save picture and remove photo.
   sniffing, 3 MB cap, per-IP and daily limits, 55 s timeout with job cancel. Never stores or logs the photo.
   Replicate deletes inputs/outputs ~1 h after each job. Setup: `docs/DEPLOYMENT.md`. Tested live on Replicate: ~6 s per try-on end to end
   through the site (start → check → image), default model `prunaai/p-image-try-on`.
+- **When the AI is configured, `/try-on` is realistic-only** (`components/store/TryOnRealistic.tsx`): tick consent,
+  add a photo, and the AI result appears automatically. No on-device step and no 34 MB model download. The on-device
+  try-on (`TryOn.tsx`) is shown only while the AI isn't configured. One automatic retry if Replicate is briefly busy.
 
 ## Honest limits (by design until later phases)
 

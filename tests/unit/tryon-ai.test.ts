@@ -85,6 +85,18 @@ describe("Replicate adapter", () => {
     await expect(p.check("../../account", sig)).rejects.toMatchObject({ code: "not_found" });
     await expect(p.check("abcdefghijklmnop1234", sig)).rejects.toMatchObject({ code: "not_found" });
   });
+  it("retries once when Replicate is briefly busy", async () => {
+    let n = 0;
+    const fake = vi.fn(async (url: string | URL | Request) => {
+      const u = String(url);
+      if (u.includes("/predictions") && n++ === 0) return new Response("busy", { status: 429 });
+      if (u.includes("/predictions")) return Response.json({ id: "abcdefghijklmnop1234", model: "prunaai/p-image-try-on", status: "processing" }, { status: 201 });
+      return new Response("x");
+    });
+    const p = replicateProvider({ REPLICATE_API_TOKEN: "t" }, fake as unknown as typeof fetch);
+    expect((await p.start(input, new AbortController().signal)).status).toBe("running");
+    expect(fake).toHaveBeenCalledTimes(2);
+  });
   it("reports a failed job as rejected", async () => {
     const fake = vi.fn(async () => Response.json({ id: "abcdefghijklmnop1234", status: "failed", error: "nsfw" }, { status: 201 }));
     const p = replicateProvider({ REPLICATE_API_TOKEN: "t", REPLICATE_TRYON_MODEL: "o/m" }, fake as unknown as typeof fetch);

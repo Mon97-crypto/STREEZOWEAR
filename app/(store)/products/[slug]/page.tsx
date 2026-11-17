@@ -89,7 +89,7 @@ export default async function ProductPage({ params }: Params) {
             <Link href="/try-on" className="mt-4 flex items-center justify-between border border-neon p-5 transition-shadow hover:shadow-[0_0_24px_var(--sw-neon-glow)]">
               <span>
                 <span className="label block text-neon">Try it on</span>
-                <span className="mt-1 block text-sm text-steel">See this tee on your own photo. Your photo stays on your device.</span>
+                <span className="mt-1 block text-sm text-steel">See yourself wearing this tee, from your own photo.</span>
               </span>
               <span aria-hidden className="text-neon">→</span>
             </Link>

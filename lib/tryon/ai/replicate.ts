@@ -86,7 +86,14 @@ export function replicateProvider(env: Env = process.env, fetchImpl: typeof fetc
     name: "replicate",
     async start(input, signal) {
       const req = buildRequest(model, input, mapping);
-      const res = await fetchImpl(req.url, { method: "POST", headers: { ...headers, Prefer: "wait=10" }, body: JSON.stringify(req.json), signal, cache: "no-store" });
+      const body = JSON.stringify(req.json);
+      const send = () => fetchImpl(req.url, { method: "POST", headers: { ...headers, Prefer: "wait=10" }, body, signal, cache: "no-store" });
+      let res = await send().catch(() => null);
+      // one retry for a brief blip (busy / rate-limited / server error / dropped connection)
+      if (!res || res.status === 429 || res.status >= 500) {
+        await new Promise((r) => setTimeout(r, 1500));
+        res = await send();
+      }
       if (res.status === 422) throw new TryOnError("rejected", "The model rejected the input");
       if (!res.ok) throw new TryOnError("provider_error", `Replicate ${res.status}`);
       return finish((await res.json()) as Prediction, signal);
