@@ -127,7 +127,14 @@ size/length/tilt sliders, reset, save picture and remove photo.
   elsewhere. Verified in the browser: after adding a photo the only requests are GETs for the detection files.
 - Fit maths is in `lib/tryon/fit.ts` (unit-tested). Pieces are listed in `lib/tryon/config.ts`; add a piece once it has
   a clean cutout. CSP gained `'wasm-unsafe-eval'` so the model can run (this does not allow JS eval).
-- **What it is not:** the instant preview places the flat tee image on the photo; it doesn't wrap or drape.
+- **Free on-device realism (upgraded):** the tee is cut into body + sleeves and warped as triangle meshes
+  (`lib/tryon/mesh.ts`, unit-tested) onto the person's shoulders, torso/hips and upper arms (MediaPipe Pose *full*);
+  a multiclass segmenter (MediaPipe selfie multiclass) puts hair, face and hands/forearms back in front of the tee;
+  the photo's own folds and light are laid over the fabric (`components/tryon/render.ts`). All self-hosted
+  (~34 MB in `public/vendor/mediapipe`, cached), all on-device, all Apache-2.0. Limits: it is a 2D warp, not cloth
+  simulation; side-on bodies and poses where the shoulders aren't visible fall back to manual placement.
+- Free *AI* try-on isn't an option for a shop: the leading open models (IDM-VTON, CatVTON, OOTDiffusion…) are
+  licensed for non-commercial use only.
 - **Realistic (AI) step**, added later at the owner's request: `POST /api/try-on` (`app/api/try-on/route.ts`) sends the
   photo (≤1024 px JPEG, made in the browser) plus the garment chosen server-side by slug to Replicate via
   `lib/tryon/ai/`, and returns the result inline as a data URI (the browser never contacts the provider).

@@ -2,52 +2,41 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { analyse, cutGarment, render, type Analysis } from "@/components/tryon/render";
 import { MAX_PHOTO_BYTES, MAX_PHOTO_PX, PHOTO_TYPES, type TryOnPiece } from "@/lib/tryon/config";
-import { defaultFit, fitTee, type Fit } from "@/lib/tryon/fit";
+import { buildMesh, NO_ADJUST, type Adjust, type Body } from "@/lib/tryon/mesh";
 
 /**
- * Try-on. Everything happens in this browser tab:
- * the photo is read from the device, drawn on a canvas, the body is found by a model that
- * runs locally (files served from this site), and the tee is drawn on top.
- * The photo is never sent anywhere and is not saved: closing or leaving the page drops it.
+ * Try-on. The instant version happens entirely in this browser tab: the photo is read from the
+ * device, the body and its parts are found by models that run locally (files served from this site),
+ * the tee is warped to the body, lit by the photo, and hair/hands are put back in front.
+ * The photo is never sent anywhere by this part and is not saved.
  */
 
 type Status = "empty" | "loading" | "ready";
 
-async function detectBody(source: HTMLCanvasElement) {
-  const { FilesetResolver, PoseLandmarker } = await import("@mediapipe/tasks-vision");
-  const files = await FilesetResolver.forVisionTasks("/vendor/mediapipe");
-  const lm = await PoseLandmarker.createFromOptions(files, {
-    baseOptions: { modelAssetPath: "/vendor/mediapipe/pose_landmarker_lite.task", delegate: "CPU" },
-    runningMode: "IMAGE",
-    numPoses: 1,
-  });
-  try {
-    const p = lm.detect(source).landmarks[0];
-    if (!p) return null;
-    const W = source.width, H = source.height;
-    const pt = (i: number) => ({ x: p[i]!.x * W, y: p[i]!.y * H, z: p[i]!.z * W, v: p[i]!.visibility ?? 0 });
-    const [ls, rs, lh, rh] = [pt(11), pt(12), pt(23), pt(24)];
-    if (ls.v < 0.5 || rs.v < 0.5) return null;
-    const hips = lh.v > 0.5 && rh.v > 0.5 && lh.y < H * 1.05 && rh.y < H * 1.05 ? ([lh, rh] as [typeof lh, typeof rh]) : null;
-    return { shoulders: [ls, rs] as const, hips };
-  } finally {
-    lm.close();
-  }
+/** a centred, front-on stand-in body when none was found, so the tee can still be placed by hand */
+function stagedBody(w: number, h: number): Body {
+  const sw = Math.min(w * 0.36, h * 0.3), cx = w / 2, y = h * 0.45;
+  return { shoulderL: { x: cx - sw / 2, y }, shoulderR: { x: cx + sw / 2, y }, hipL: null, hipR: null, elbowL: null, elbowR: null, turn: 1 };
 }
 
 export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabled?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const photoRef = useRef<HTMLCanvasElement | null>(null); // the resized photo, kept in memory only
+  const analysisRef = useRef<Analysis | null>(null);
   const teeRef = useRef<Record<string, HTMLImageElement>>({});
   const [status, setStatus] = useState<Status>("empty");
   const [viewId, setViewId] = useState(piece.views[0]!.id);
-  const [fit, setFit] = useState<Fit | null>(null);
-  const [auto, setAuto] = useState<Fit | null>(null);
+  const [body, setBody] = useState<Body | null>(null);
+  const [adj, setAdj] = useState<Adjust>(NO_ADJUST);
+  const [realism, setRealism] = useState(0.8);
+  const [teeReady, setTeeReady] = useState(0);
   const [note, setNote] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const view = piece.views.find((v) => v.id === viewId)!;
   const drag = useRef<{ x: number; y: number } | null>(null);
+  const frame = useRef(0);
   const [consent, setConsent] = useState(false);
   const [ai, setAi] = useState<{ state: "idle" | "working" | "done" | "error"; image?: string; msg?: string }>({ state: "idle" });
 
@@ -56,36 +45,21 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
     for (const v of piece.views) {
       const img = new Image();
       img.src = v.src;
-      img.onload = () => { teeRef.current[v.id] = img; draw(); };
+      img.onload = () => { teeRef.current[v.id] = img; setTeeReady((n) => n + 1); };
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [piece]);
 
   const draw = useCallback(() => {
-    const c = canvasRef.current, photo = photoRef.current;
-    if (!c || !photo || !fit) return;
-    const ctx = c.getContext("2d")!;
-    c.width = photo.width; c.height = photo.height;
-    ctx.drawImage(photo, 0, 0);
-    const tee = teeRef.current[view.id];
-    if (!tee) return;
-    const w = fit.width, h = w * view.anchor.aspect * fit.stretch;
-    ctx.save();
-    ctx.translate(fit.cx, fit.cy);
-    ctx.rotate(fit.angle);
-    ctx.scale(fit.turn, 1);
-    ctx.shadowColor = "rgba(0,0,0,.45)";
-    ctx.shadowBlur = w * 0.04;
-    ctx.shadowOffsetY = w * 0.015;
-    ctx.imageSmoothingQuality = "high";
-    ctx.drawImage(tee, -w * view.anchor.collarX, -h * view.anchor.collarY, w, h);
-    ctx.restore();
-  }, [fit, view]);
+    const c = canvasRef.current, photo = photoRef.current, an = analysisRef.current, tee = teeRef.current[view.id];
+    if (!c || !photo || !an || !body || !tee) return;
+    cancelAnimationFrame(frame.current);
+    frame.current = requestAnimationFrame(() => render(c, photo, cutGarment(tee, view.spec), buildMesh(view.spec, body, adj), an, { realism }));
+  }, [body, adj, view, realism]);
 
-  useEffect(draw, [draw]);
+  useEffect(draw, [draw, teeReady]);
 
-  // drop the photo when leaving the page
-  useEffect(() => () => { photoRef.current = null; }, []);
+  // drop the photo and everything derived from it when leaving the page
+  useEffect(() => () => { photoRef.current = null; analysisRef.current = null; }, []);
 
   async function onFile(file: File | undefined) {
     if (!file) return;
@@ -101,21 +75,22 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
       photo.getContext("2d")!.drawImage(bmp, 0, 0, photo.width, photo.height);
       bmp.close();
       photoRef.current = photo;
-      let f: Fit;
+      let found: Body | null = null;
       try {
-        const body = await detectBody(photo);
-        if (body) {
-          f = fitTee(body.shoulders[0], body.shoulders[1], body.hips, view.anchor);
-          setNote("Fitted to your shoulders. Drag the tee or use the sliders to fine-tune.");
-        } else {
-          f = defaultFit(photo.width, photo.height);
-          setNote("We couldn't find your shoulders in this photo. Drag the tee into place, or try a front-facing photo.");
-        }
+        const an = await analyse(photo);
+        analysisRef.current = an;
+        found = an.body;
+        setNote(found
+          ? "Fitted to your body: shoulders, torso and arms. Drag or use the sliders to fine-tune."
+          : "We couldn't find your shoulders in this photo. Drag the tee into place, or try a front-facing photo.");
       } catch {
-        f = defaultFit(photo.width, photo.height);
+        analysisRef.current = { body: null, occlusion: null, shading: photo };
+        setRealism(0);
         setNote("Automatic fit isn't available on this device. Drag the tee into place.");
       }
-      setAuto(f); setFit(f); setStatus("ready");
+      setBody(found ?? stagedBody(photo.width, photo.height));
+      setAdj(NO_ADJUST);
+      setStatus("ready");
     } catch {
       setStatus("empty");
       setError("We couldn't open that photo. Try a JPG or PNG.");
@@ -156,10 +131,10 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
 
   function clear() {
     setAi({ state: "idle" }); setConsent(false);
-    photoRef.current = null;
+    photoRef.current = null; analysisRef.current = null;
     const c = canvasRef.current;
     if (c) { c.getContext("2d")!.clearRect(0, 0, c.width, c.height); c.width = c.height = 0; }
-    setFit(null); setAuto(null); setStatus("empty"); setNote(null);
+    setBody(null); setAdj(NO_ADJUST); setStatus("empty"); setNote(null);
   }
 
   function save() {
@@ -173,7 +148,7 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
   }
 
   const scale = () => { const c = canvasRef.current!; return c.width / c.getBoundingClientRect().width; };
-  const upd = (p: Partial<Fit>) => setFit((f) => (f ? { ...f, ...p } : f));
+  const upd = (p: Partial<Adjust>) => setAdj((a) => ({ ...a, ...p }));
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1.35fr_1fr]">
@@ -186,9 +161,9 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
             aria-label={`Your photo wearing the ${piece.name} tee`}
             onPointerDown={(e) => { drag.current = { x: e.clientX, y: e.clientY }; e.currentTarget.setPointerCapture(e.pointerId); }}
             onPointerMove={(e) => {
-              if (!drag.current || !fit) return;
-              const k = scale();
-              upd({ cx: fit.cx + (e.clientX - drag.current.x) * k, cy: fit.cy + (e.clientY - drag.current.y) * k });
+              if (!drag.current) return;
+              const k = scale(), dx = (e.clientX - drag.current.x) * k, dy = (e.clientY - drag.current.y) * k;
+              setAdj((a) => ({ ...a, dx: a.dx + dx, dy: a.dy + dy }));
               drag.current = { x: e.clientX, y: e.clientY };
             }}
             onPointerUp={() => (drag.current = null)}
@@ -197,7 +172,7 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
           {status !== "ready" && (
             <div className="flex flex-col items-center gap-5 p-8 text-center">
               {status === "loading" ? (
-                <p className="label text-neon" role="status">Fitting the tee…</p>
+                <p className="label text-neon" role="status">Reading your pose and fitting the tee…</p>
               ) : (
                 <>
                   <p className="display text-3xl">Your photo here.</p>
@@ -253,11 +228,12 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
 
         <fieldset disabled={status !== "ready"} className="space-y-5 disabled:opacity-40">
           <p className="min-h-10 text-sm text-steel" role="status">{note ?? "Upload a photo to start."}</p>
-          <Slider label="Size" min={0.5} max={1.8} step={0.01} value={fit && auto ? fit.width / auto.width : 1} onChange={(v) => auto && upd({ width: auto.width * v })} />
-          <Slider label="Length" min={0.8} max={1.4} step={0.01} value={fit?.stretch ?? 1} onChange={(v) => upd({ stretch: v })} />
-          <Slider label="Tilt" min={-25} max={25} step={0.5} value={fit ? (fit.angle * 180) / Math.PI : 0} onChange={(v) => upd({ angle: (v * Math.PI) / 180 })} />
+          <Slider label="Size" min={0.6} max={1.6} step={0.01} value={adj.scale} onChange={(v) => upd({ scale: v })} />
+          <Slider label="Length" min={0.8} max={1.3} step={0.01} value={adj.length} onChange={(v) => upd({ length: v })} />
+          <Slider label="Tilt" min={-20} max={20} step={0.5} value={adj.tilt} onChange={(v) => upd({ tilt: v })} />
+          <Slider label="Realism (light and folds)" min={0} max={1} step={0.05} value={realism} onChange={setRealism} />
           <div className="flex flex-wrap gap-3">
-            <button type="button" className="btn btn-ghost" onClick={() => auto && setFit(auto)}>Reset fit</button>
+            <button type="button" className="btn btn-ghost" onClick={() => setAdj(NO_ADJUST)}>Reset fit</button>
             <button type="button" className="btn btn-ghost" onClick={save}>Save picture</button>
             <button type="button" className="btn btn-ghost" onClick={clear}>Remove photo</button>
           </div>
@@ -289,7 +265,7 @@ export function TryOn({ piece, aiEnabled = false }: { piece: TryOnPiece; aiEnabl
 }
 
 function Slider({ label, value, onChange, ...rest }: { label: string; value: number; min: number; max: number; step: number; onChange: (v: number) => void }) {
-  const id = `tryon-${label.toLowerCase()}`;
+  const id = `tryon-${label.toLowerCase().replace(/[^a-z]+/g, "-")}`;
   return (
     <div>
       <label htmlFor={id} className="label mb-2 block text-steel">{label}</label>
